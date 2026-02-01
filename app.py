@@ -4,6 +4,7 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
+import entries
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -25,8 +26,8 @@ def create_entry():
         description = request.form["description"]
         date = request.form["date"]
         user_id = session["user_id"]
-    sql = "INSERT INTO entries (title, description, date, user_id) VALUES (?, ?, ?, ?)"
-    db.execute(sql, [title, description, date, user_id])
+    
+    entries.add_entry(title, description, date, user_id)
     return redirect("/")
 
 
