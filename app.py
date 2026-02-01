@@ -12,11 +12,15 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    all_entries = entries.get_entries()
+    if "user_id" not in session:
+        return render_template("index.html", all_entries=[])
+    all_entries = entries.get_entries_by_user(session["user_id"])
     return render_template("index.html", all_entries=all_entries)
 
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
+    if "user_id" not in session:
+        return redirect("/login")
     entry = entries.get_entry(entry_id)
     return render_template("show_entry.html", entry=entry)
 
@@ -28,16 +32,15 @@ def new_entry():
 def create_entry():
     if request.method == "GET":
         return render_template("new_entry.html")
-    if request.method == "POST":
-        title = request.form["title"]
-        description = request.form["description"]
-        date = request.form["date"]
-        user_id = session["user_id"]
+    if "user_id" not in session:
+        return redirect("/login")
+    title = request.form["title"]
+    description = request.form["description"]
+    date = request.form["date"]
+    user_id = session["user_id"]
     
     entries.add_entry(title, description, date, user_id)
     return redirect("/")
-
-
 
 @app.route("/register")
 def register():
@@ -58,7 +61,7 @@ def create():
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
 
-    return "Tunnus luotu"
+    return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
