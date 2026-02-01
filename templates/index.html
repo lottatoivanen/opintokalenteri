@@ -13,15 +13,9 @@
   <p>
     <a href="/logout">Kirjaudu ulos</a>
   </p>
-  {% endif %}
 
   <p>
-    <a href="/login">Kirjaudu sisään</a> |
-    <a href="/register">Rekisteröidy</a>
-  </p>
-
-  <p>
-    <a href="/new_entry">Uusi merkintä</a> |
+    <a href="/new_entry">Uusi merkintä</a>
   </p>
 
   <h2>Merkinnät</h2>
@@ -34,6 +28,14 @@
       <li>Ei merkintöjä.</li>
     {% endfor %}
   </ul>
+  {% endif %}
+
+  {% if not session.username %}
+  <p>
+    <a href="/login">Kirjaudu sisään</a> |
+    <a href="/register">Rekisteröidy</a>
+  </p>
+  {% endif %}
 </body>
 
 </html>
