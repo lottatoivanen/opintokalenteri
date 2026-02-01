@@ -23,6 +23,18 @@
   <p>
     <a href="/new_entry">Uusi merkintä</a> |
   </p>
+
+  <h2>Merkinnät</h2>
+  <ul>
+    {% for entry in all_entries %}
+      <li>
+        {{ entry.title }}<br>
+        Aikaraja: {{ entry.date }}
+      </li>
+    {% else %}
+      <p>Ei merkintöjä.</p>
+    {% endfor %}
+  </ul>
 </body>
 
 </html>

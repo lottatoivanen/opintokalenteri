@@ -3,15 +3,17 @@ from flask import Flask
 from flask import redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
+import os
 import db
-import entries
+import entry.entries as entries
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_entries = entries.get_entries()
+    return render_template("index.html", all_entries=all_entries)
 
 @app.route("/new_entry")
 def new_entry():
