@@ -1,12 +1,8 @@
 import sqlite3
-import os
 from flask import g
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "database.db")
-
 def get_connection():
-    con = sqlite3.connect(DB_PATH)
+    con = sqlite3.connect("database.db")
     con.execute("PRAGMA foreign_keys = ON")
     con.row_factory = sqlite3.Row
     return con

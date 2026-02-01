@@ -27,12 +27,11 @@
   <h2>Merkinnät</h2>
   <ul>
     {% for entry in all_entries %}
-      <li>
-        {{ entry.title }}<br>
-        Aikaraja: {{ entry.date }}
-      </li>
+      <li><a href="/entry/{{ entry.id }}">
+        {{ entry.title }}</a><br>
+        Aikaraja: {{ entry.date }}</li>
     {% else %}
-      <p>Ei merkintöjä.</p>
+      <li>Ei merkintöjä.</li>
     {% endfor %}
   </ul>
 </body>
