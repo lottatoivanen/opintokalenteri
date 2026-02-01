@@ -12,17 +12,24 @@ app.secret_key = config.secret_key
 def index():
     return render_template("index.html")
 
-@app.route("/new_entry", methods=["POST"])
+@app.route("/new_entry")
 def new_entry():
-    title = request.form["title"]
-    description = request.form["description"]
-    date = request.form["date"]
-    user_id = session["user_id"]
+    return render_template("new_entry.html")
 
+@app.route("/create_entry", methods=["GET", "POST"])
+def create_entry():
+    if request.method == "GET":
+        return render_template("new_entry.html")
+    if request.method == "POST":
+        title = request.form["title"]
+        description = request.form["description"]
+        date = request.form["date"]
+        user_id = session["user_id"]
     sql = "INSERT INTO entries (title, description, date, user_id) VALUES (?, ?, ?, ?)"
     db.execute(sql, [title, description, date, user_id])
-
     return redirect("/")
+
+
 
 @app.route("/register")
 def register():
@@ -57,8 +64,6 @@ def login():
         result = db.query(sql, [username])[0]
         user_id = result["id"]
         password_hash = result["password_hash"]
-
-        password_hash = db.query(sql, [username])[0][0]
 
         if check_password_hash(password_hash, password):
             session["user_id"] = user_id
