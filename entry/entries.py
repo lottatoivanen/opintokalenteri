@@ -13,5 +13,5 @@ def get_entries_by_user(user_id):
     return db.query(sql, [user_id])
 
 def get_entry(entry_id):
-    sql = """SELECT entries.id, entries.title, entries.description, entries.date, users.username FROM entries, users WHERE entries.user_id = users.id AND entries.id AND users.user_id = ?"""
+    sql = """SELECT entries.id, entries.title, entries.description, entries.date, users.username FROM entries, users WHERE entries.user_id = users.id AND entries.id = ?"""
     return db.query(sql, [entry_id])[0]
