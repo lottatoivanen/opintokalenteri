@@ -42,6 +42,20 @@ def create_entry():
     entries.add_entry(title, description, date, user_id)
     return redirect("/")
 
+@app.route("/edit_entry/<int:entry_id>", methods=["GET", "POST"])
+def edit_entry(entry_id):
+    if "user_id" not in session:
+        return redirect("/login")
+    entry = entries.get_entry(entry_id)
+    if request.method == "GET":
+        return render_template("edit_entry.html", entry=entry)
+    title = request.form["title"]
+    description = request.form["description"]
+    date = request.form["date"]
+    
+    entries.update_entry(entry_id, title, description, date)
+    return redirect("/entry/{}".format(entry_id))
+
 @app.route("/register")
 def register():
     return render_template("register.html")

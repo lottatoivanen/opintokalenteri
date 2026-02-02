@@ -1,0 +1,27 @@
+<html>
+
+<head>
+  <title>Merkinnän muokkaus</title>
+</head>
+
+<body>
+    <h1>Merkinnän {{ entry.title }} muokkaus</h1>
+  <form action="/edit_entry/{{ entry.id }}" method="post">
+    <p>
+      Otsikko: <br />
+      <input type="text" name="title" value="{{ entry.title }}" />
+    </p>
+    <p>
+        Kuvaus: <br />
+        <textarea name="description" rows="5" cols="40">{{ entry.description }}</textarea>
+    </p>
+    <p>
+      Aikaraja: <br />
+      <input type="date" name="date" value="{{ entry.date }}" />
+    </p>
+    <input type="hidden" name="entry_id" value="{{ entry.id }}" />
+    <input type="submit" value="Tallenna muutokset" />
+  </form>
+</body>
+
+</html>

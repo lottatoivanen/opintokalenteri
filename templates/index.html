@@ -8,7 +8,6 @@
     <h1>Opintokalenteri</h1>
   {% if session.username %}
   <p>
-    Olet kirjautunut nimellä {{ session.username }}, id-numerosi on {{ session.user_id }}.
   </p>
   <p>
     <a href="/logout">Kirjaudu ulos</a>
@@ -23,7 +22,9 @@
     {% for entry in all_entries %}
       <li><a href="/entry/{{ entry.id }}">
         {{ entry.title }}</a><br>
-        Aikaraja: {{ entry.date }}</li>
+        Aikaraja: {{ entry.date }}<br>
+        <a href="/edit_entry/{{ entry.id }}">Muokkaa merkintää</a>
+      </li>
     {% else %}
       <li>Ei merkintöjä.</li>
     {% endfor %}

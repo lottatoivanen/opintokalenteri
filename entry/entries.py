@@ -13,5 +13,12 @@ def get_entries_by_user(user_id):
     return db.query(sql, [user_id])
 
 def get_entry(entry_id):
-    sql = """SELECT entries.id, entries.title, entries.description, entries.date, users.username FROM entries, users WHERE entries.user_id = users.id AND entries.id = ?"""
-    return db.query(sql, [entry_id])[0]
+    sql = """SELECT entries.id, entries.title, entries.description, entries.date, entries.user_id, users.username AS username FROM entries JOIN users ON users.id = entries.user_id WHERE entries.id = ?"""
+    result = db.query(sql, [entry_id])
+    if result:
+        return result[0]
+    return None
+
+def update_entry(entry_id, title, description, date):
+    sql = """UPDATE entries SET title = ?, description = ?, date = ? WHERE id = ?"""
+    db.execute(sql, [title, description, date, entry_id])
