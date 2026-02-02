@@ -8,7 +8,7 @@ def get_entries(user_id):
     sql = """SELECT id, title, date FROM entries ORDER BY date ASC"""
     return db.query(sql)
 
-def get_entries_by_user(user_id):
+def get_entries_by_user(user_id): 
     sql = """SELECT id, title, date FROM entries WHERE user_id = ? ORDER BY date ASC"""
     return db.query(sql, [user_id])
 
@@ -22,3 +22,7 @@ def get_entry(entry_id):
 def update_entry(entry_id, title, description, date):
     sql = """UPDATE entries SET title = ?, description = ?, date = ? WHERE id = ?"""
     db.execute(sql, [title, description, date, entry_id])
+
+def delete_entry(entry_id):
+    sql = """DELETE FROM entries WHERE id = ?"""
+    db.execute(sql, [entry_id])

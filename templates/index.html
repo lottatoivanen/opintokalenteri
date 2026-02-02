@@ -22,8 +22,7 @@
     {% for entry in all_entries %}
       <li><a href="/entry/{{ entry.id }}">
         {{ entry.title }}</a><br>
-        Aikaraja: {{ entry.date }}<br>
-        <a href="/edit_entry/{{ entry.id }}">Muokkaa merkintää</a>
+        Aikaraja: {{ entry.date }}
       </li>
     {% else %}
       <li>Ei merkintöjä.</li>

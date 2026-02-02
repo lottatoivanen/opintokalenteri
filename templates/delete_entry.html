@@ -1,0 +1,17 @@
+<html>
+
+<head>
+  <title>Merkinnän poisto</title>
+</head>
+
+<body>
+    <h1>Merkinnän {{ entry.title }} poisto</h1>
+    <form action="/delete_entry/{{ entry.id }}" method="post">
+        <p>Oletko varma, että haluat poistaa tämän merkinnän?</p>
+        <input type="hidden" name="entry_id" value="{{ entry.id }}" />
+        <input type="submit" name="delete" value="Poista merkintä" />
+        <input type="submit" name="cancel" value="Peruuta" />
+    </form>
+</body>
+
+</html>

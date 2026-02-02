@@ -6,6 +6,8 @@
 
 <body>
     <h1>{{ entry.title }}</h1>
+    <a href="/edit_entry/{{ entry.id }}">Muokkaa merkintää</a><br>
+    <a href="/delete_entry/{{ entry.id }}">Poista merkintä</a>
     <p>
         Kuvaus: <br />
         {{ entry.description }}
