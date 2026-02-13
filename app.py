@@ -17,6 +17,18 @@ def index():
     all_entries = entries.get_entries_by_user(session["user_id"])
     return render_template("index.html", all_entries=all_entries)
 
+@app.route("/find_entry")
+def find_entry():
+    if "user_id" not in session:
+        return redirect("/login")
+    query = request.args.get("query")
+    if query:
+        results = entries.find_entry(query)
+    else:
+        query = ""
+        results = []
+    return render_template("find_entry.html", query=query, results=results)
+
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
     if "user_id" not in session:

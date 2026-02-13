@@ -1,0 +1,32 @@
+<html>
+
+<head>
+  <title>Etsi merkintä</title>
+</head>
+
+<body>
+    <h1>Etsi merkintä</h1>
+    <form action="/find_entry" method="get">
+        <p>
+            Hakusana:<br />
+            <input type="text" name="query" value="{{ query }}" />
+        </p>
+        <input type="submit" value="Etsi merkintöjä" />
+    </form>
+
+    {% if query %}
+    <h2>Hakutulokset</h2>
+    <ul>
+    {% for entry in results %}
+        <li>
+        <a href="/entry/{{ entry.id }}">{{ entry.title }}</a><br>
+        Aikaraja: {{ entry.date }}
+        </li>
+    {% else %}
+        <li>Ei merkintöjä hakusanalla "{{ query }}".</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+
+</html>
