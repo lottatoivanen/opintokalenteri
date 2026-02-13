@@ -34,6 +34,8 @@ def show_entry(entry_id):
     if "user_id" not in session:
         return redirect("/login")
     entry = entries.get_entry(entry_id)
+    if not entry:
+        return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
     return render_template("show_entry.html", entry=entry)
@@ -59,6 +61,8 @@ def create_entry():
 @app.route("/edit_entry/<int:entry_id>")
 def edit_entry(entry_id):
     entry = entries.get_entry(entry_id)
+    if not entry:
+        return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
     return render_template("edit_entry.html", entry=entry)
@@ -69,6 +73,8 @@ def update_entry(entry_id):
         return redirect("/login")
     entry_id = request.form["entry_id"]
     entry = entries.get_entry(entry_id)
+    if not entry:
+        return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
 
@@ -83,6 +89,8 @@ def delete_entry(entry_id):
     if "user_id" not in session:
         return redirect("/login")
     entry = entries.get_entry(entry_id)
+    if not entry:
+        return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
     if request.method == "GET":
