@@ -10,6 +10,10 @@ import entry.entries as entries
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        return redirect("/login")
+
 @app.route("/")
 def index():
     if "user_id" not in session:
@@ -19,8 +23,7 @@ def index():
 
 @app.route("/find_entry")
 def find_entry():
-    if "user_id" not in session:
-        return redirect("/login")
+    require_login()
     query = request.args.get("query")
     if query:
         results = entries.find_entry(query)
@@ -31,8 +34,7 @@ def find_entry():
 
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
-    if "user_id" not in session:
-        return redirect("/login")
+    require_login()
     entry = entries.get_entry(entry_id)
     if not entry:
         return abort(404)
@@ -42,14 +44,14 @@ def show_entry(entry_id):
 
 @app.route("/new_entry")
 def new_entry():
+    require_login()
     return render_template("new_entry.html")
 
 @app.route("/create_entry", methods=["GET", "POST"])
 def create_entry():
     if request.method == "GET":
         return render_template("new_entry.html")
-    if "user_id" not in session:
-        return redirect("/login")
+    require_login()
     title = request.form["title"]
     description = request.form["description"]
     date = request.form["date"]
@@ -146,6 +148,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["user_id"]
-    del session["username"]
+    if "user_id" in session:
+        del session["user_id"]
+        del session["username"]
     return redirect("/")
