@@ -1,9 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort
-from werkzeug.security import check_password_hash, generate_password_hash
 import config
-import os
 import db
 import entries
 import user
@@ -20,7 +18,7 @@ def require_login():
 def index():
     if "user_id" not in session:
         return render_template("index.html", all_entries=[])
-    all_entries = entries.get_entries_by_user(session["user_id"])
+    all_entries = user.get_entries_by_user(session["user_id"])
     return render_template("index.html", all_entries=all_entries)
 
 @app.route("/user/<username>")
@@ -29,7 +27,7 @@ def user_entries(username):
     u = user.get_user_by_username(username)
     if not u:
         return abort(404)
-    e = entries.get_entries_by_user(u["id"])
+    e = user.get_entries_by_user(u["id"])
     return render_template("show_user.html", user=u, entries=e)    
 
 @app.route("/find_entry")
@@ -143,14 +141,10 @@ def create():
     password2 = request.form["password2"]
     if password1 != password2:
         return "VIRHE: salasanat eivät ole samat"
-    password_hash = generate_password_hash(password1)
-
     try:
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
+        user.create_user(username, password1)
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
-
     return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -161,17 +155,13 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])[0]
-        user_id = result["id"]
-        password_hash = result["password_hash"]
-
-        if check_password_hash(password_hash, password):
+        user_id = user.check_login(username, password)
+        if user_id:
             session["user_id"] = user_id
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            return "VIRHE: virheellinen tunnus tai salasana"
 
 @app.route("/logout")
 def logout():
