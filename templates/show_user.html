@@ -1,0 +1,19 @@
+<html>
+
+<head>
+    <title>Käyttäjä {{ user.username }}</title>
+</head>
+
+<body>
+    <h1>Käyttäjä {{ user.username }}</h1>
+    <p>Käyttäjällä on yhteensä {{ entries|length }} merkintää</p>
+    <h2>Merkinnät</h2>
+    <ul>
+        {% for entry in entries %}
+        <li><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
+        {% endfor %}
+    </ul>
+    <p><a href="/">Takaisin etusivulle</a></p>
+</body>
+
+</html>

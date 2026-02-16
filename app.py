@@ -5,8 +5,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import os
 import db
-import entry.entries as entries
-import re
+import entries
+import user
 from datetime import datetime
 
 app = Flask(__name__)
@@ -22,6 +22,15 @@ def index():
         return render_template("index.html", all_entries=[])
     all_entries = entries.get_entries_by_user(session["user_id"])
     return render_template("index.html", all_entries=all_entries)
+
+@app.route("/user/<username>")
+def user_entries(username):
+    require_login()
+    u = user.get_user_by_username(username)
+    if not u:
+        return abort(404)
+    e = entries.get_entries_by_user(u["id"])
+    return render_template("show_user.html", user=u, entries=e)    
 
 @app.route("/find_entry")
 def find_entry():
