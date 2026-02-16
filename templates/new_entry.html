@@ -9,15 +9,15 @@
   <form action="/create_entry" method="post">
     <p>
       Otsikko: <br />
-      <input type="text" name="title" />
+      <input type="text" name="title" maxlength="50" required/>
     </p>
     <p>
         Kuvaus: <br />
-        <textarea name="description" rows="5" cols="40"></textarea>
+        <textarea name="description" rows="5" cols="40" maxlength="1000" required></textarea>
     </p>
     <p>
       Aikaraja: <br />
-      <input type="date" name="date" />
+      <input type="date" name="date" pattern="\d{4}-\d{2}-\d{2}" required />
     </p>
     <input type="submit" value="Luo merkintä" />
   </form>

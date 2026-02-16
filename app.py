@@ -6,6 +6,8 @@ import config
 import os
 import db
 import entry.entries as entries
+import re
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -53,8 +55,16 @@ def create_entry():
         return render_template("new_entry.html")
     require_login()
     title = request.form["title"]
+    if not title or len(title) > 50:
+        return abort(403)
     description = request.form["description"]
+    if not description or len(description) > 1000:
+        return abort(403)
     date = request.form["date"]
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        abort(403)
     user_id = session["user_id"]
     
     entries.add_entry(title, description, date, user_id)
