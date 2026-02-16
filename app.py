@@ -91,8 +91,16 @@ def update_entry(entry_id):
         return abort(403)
 
     title = request.form["title"]
+    if not title or len(title) > 50:
+        return abort(403)
     description = request.form["description"]
+    if not description or len(description) > 1000:
+        return abort(403)
     date = request.form["date"]
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        abort(403)
     entries.update_entry(entry_id, title, description, date)
     return redirect("/entry/" + str(entry_id))
 
