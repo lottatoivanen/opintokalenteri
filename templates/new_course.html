@@ -1,0 +1,22 @@
+<html>
+
+<head>
+  <title>Lisää kurssi</title>
+</head>
+
+<body>
+    <h1>Lisää uusi kurssi</h1>
+  <form action="/create_course" method="post">
+    <p>
+        Kurssi: <br />
+        <input type="text" name="name" maxlength="50" required/>
+    </p>
+    <p>
+        Kuvaus: <br />
+        <textarea name="description" rows="5" cols="40" maxlength="1000"></textarea>
+    </p>
+    <input type="submit" value="Luo kurssi" />
+  </form>
+</body>
+
+</html>     

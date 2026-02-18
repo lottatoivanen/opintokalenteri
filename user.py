@@ -9,7 +9,11 @@ def get_user_by_username(username):
     return None
 
 def get_entries_by_user(user_id):
-    sql = """SELECT id, title, date FROM entries WHERE user_id = ? ORDER BY date ASC"""
+    sql = """SELECT entries.id, entries.title, entries.date, courses.id AS course_id, courses.name AS course_name FROM entries LEFT JOIN courses ON courses.id = entries.course_id WHERE entries.user_id = ? ORDER BY date ASC"""
+    return db.query(sql, [user_id])
+
+def get_courses_by_user(user_id):
+    sql = """SELECT id, name FROM courses WHERE user_id = ?"""
     return db.query(sql, [user_id])
 
 def create_user(username, password):

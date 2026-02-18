@@ -1,0 +1,23 @@
+<html>
+
+<head>
+  <title>Kurssin muokkaus</title>
+</head>
+
+<body>
+    <h1>Kurssin {{ course.name }} muokkaus</h1>
+  <form action="/edit_course/{{ course.id }}" method="post">
+    <p>
+      Otsikko: <br />
+      <input type="text" name="name" value="{{ course.name }}" maxlength="50" required />
+    </p>
+    <p>
+        Kuvaus: <br />
+        <textarea name="description" rows="5" cols="40" maxlength="1000">{{ course.description }}</textarea>
+    </p>
+    <input type="hidden" name="course_id" value="{{ course.id }}" />
+    <input type="submit" value="Tallenna muutokset" />
+  </form>
+</body>
+
+</html>

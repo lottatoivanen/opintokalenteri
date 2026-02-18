@@ -1,0 +1,31 @@
+<html>
+
+<head>
+  <title>{{ course.name }}</title>
+</head>
+
+<body>
+    <h1>{{ course.name }}</h1>
+    <a href="/edit_course/{{ course.id }}">Muokkaa kurssia</a><br>
+    <a href="/delete_course/{{ course.id }}">Poista kurssi</a>
+    <p>
+        Kuvaus: <br />
+        {{ course.description }}
+    </p>
+    <a href="/new_entry?course_id={{ course.id }}">Lisää merkintä</a>
+    <h2> Merkinnät </h2>
+        <p>
+            {% if entries %}
+                <ul>
+                {% for entry in entries %}
+                    <li><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                Ei merkintöjä.
+            {% endif %}
+
+    <p><a href="/">Takaisin etusivulle</a></p>
+</body>
+
+</html>

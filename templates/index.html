@@ -10,21 +10,36 @@
   <p>
   </p>
   <p>
-    <a href="/logout">Kirjaudu ulos</a>
+    <a href="/logout">Kirjaudu ulos</a> |
     <a href="/user/{{ session.username }}">Omat sivut</a>
   </p>
 
   <p>
-    <a href="/new_entry">Uusi merkintä</a>
+    <a href="/new_entry">Uusi merkintä</a> |
     <a href="/find_entry">Etsi merkintä</a>
   </p>
+
+  <p>
+    <a href="/new_course">Lisää kurssi</a>
+  </p>
+
+  <h2>Kurssit</h2>
+  <ul>
+    {% for course in all_courses %}
+      <li><a href="/course/{{ course.id }}">{{ course.name }}</a></li>
+    {% else %}
+      <li>Ei kursseja.</li>
+    {% endfor %}
+  </ul>
 
   <h2>Merkinnät</h2>
   <ul>
     {% for entry in all_entries %}
-      <li><a href="/entry/{{ entry.id }}">
-        {{ entry.title }}</a><br>
-        Aikaraja: {{ entry.date }}
+      <li>
+        <a href="/entry/{{ entry.id }}">{{ entry.title }}</a><br>
+        {% if entry.course_name %}
+          Kurssi: <a href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
+        {% endif %}
       </li>
     {% else %}
       <li>Ei merkintöjä.</li>

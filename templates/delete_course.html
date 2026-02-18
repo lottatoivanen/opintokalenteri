@@ -1,0 +1,17 @@
+<html>
+
+<head>
+  <title>Kurssin poisto</title>
+</head>
+
+<body>
+    <h1>Kurssin {{ course.name }} poisto</h1>
+    <form action="/delete_course/{{ course.id }}" method="post">
+        <p>Oletko varma, että haluat poistaa tämän kurssin?</p>
+        <input type="hidden" name="course_id" value="{{ course.id }}" />
+        <input type="submit" name="delete" value="Poista kurssi" />
+        <input type="submit" name="cancel" value="Peruuta" />
+    </form>
+</body>
+
+</html>

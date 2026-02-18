@@ -10,5 +10,13 @@ CREATE TABLE entries (
     description TEXT,
     date DATE,
     user_id INTEGER REFERENCES users
+    course_id INTEGER REFERENCES courses
     
+);
+
+CREATE TABLE courses (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    user_id INTEGER REFERENCES users
 );
