@@ -4,16 +4,46 @@
     <title>Käyttäjä {{ user.username }}</title>
 </head>
 
-<body>
-    <h1>Käyttäjä {{ user.username }}</h1>
+<link rel="stylesheet" href="/static/main.css">
+
+<body class="center-page">
+    {% if session.username %}
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <br>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/">Etusivu</a>
+        <a class="btn btn--ghost" href="/new_entry">Uusi merkintä</a>
+        <a class="btn btn--ghost" href="/user/{{ session.username }}">Omat sivut</a>
+        <a class="btn btn--ghost" href="/find_entry">Etsi merkintä</a>
+        <a class="btn btn--ghost" href="/new_course">Lisää kurssi</a>
+        <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
+        </nav>
+    </header>
+
+    <header class="form-top-bar">
+        <h2 class="form-top-bar-title">Käyttäjä {{ user.username }}</h2>
+    </header>
     <p>Käyttäjällä on yhteensä {{ entries|length }} merkintää</p>
-    <h2>Merkinnät</h2>
+    <br>
+    <h3>Merkinnät</h3>
     <ul>
         {% for entry in entries %}
-        <li><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
+        <li><a href="/entry/{{ entry.id }}" class="btn btn--link">{{ entry.title }}</a></li>
         {% endfor %}
     </ul>
-    <p><a href="/">Takaisin etusivulle</a></p>
+    <p><a href="/" class="btn btn--small">Takaisin etusivulle</a></p>
+    {% endif %}
+
+    {% if not session.username %}
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/login">Kirjaudu sisään</a>
+        <a class="btn btn--ghost" href="/register">Rekisteröidy</a>
+        </nav>
+    </header>
+    {% endif %}
 </body>
 
 </html>

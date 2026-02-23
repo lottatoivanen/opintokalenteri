@@ -4,55 +4,69 @@
   <title>Opintokalenteri</title>
 </head>
 
+<link rel="stylesheet" href="/static/main.css">
+
 <body>
-    <h1>Opintokalenteri</h1>
-  {% if session.username %}
-  <p>
-  </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a> |
-    <a href="/user/{{ session.username }}">Omat sivut</a>
-  </p>
+    {% if session.username %}
 
-  <p>
-    <a href="/new_entry">Uusi merkintä</a> |
-    <a href="/find_entry">Etsi merkintä</a>
-  </p>
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <br>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/">Etusivu</a>
+        <a class="btn btn--ghost" href="/new_course">Lisää kurssi</a>
+        <a class="btn btn--ghost" href="/new_entry">Uusi merkintä</a>
+        <a class="btn btn--ghost" href="/find_entry">Etsi merkintä</a>
+        <a class="btn btn--ghost" href="/all_courses">Muiden kurssit</a>
+        <a class="btn btn--ghost" href="/user/{{ session.username }}">Omat sivut</a>
+        <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
+        </nav>
+    </header>
+    <h3>Kurssit</h3>
+    <ul>
+        {% for course in all_courses %}
+            <li><a class="btn btn--link" href="/course/{{ course.id }}">{{ course.name }}</a></li>
+        {% else %}
+            <li>Ei kursseja.</li>
+        {% endfor %}
+    </ul>
 
-  <p>
-    <a href="/new_course">Lisää kurssi</a>
-  </p>
+      <h2>Omat kalenterimerkinnät</h2>
+      <ul>
+        {% for entry in all_entries %}
+            <li>
+                <a class="btn btn--link" href="/entry/{{ entry.id }}">{{ entry.title }}</a><br>
+                Ajankohta: {{ entry.date }}<br>
+                {% if entry.course_name %}
+                    Kurssi: <a class="btn btn--link" href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
+                {% endif %}
+            </li>
+          {% else %}
+            <li>Ei merkintöjä.</li>
+          {% endfor %}
+      </ul>
 
-  <h2>Kurssit</h2>
-  <ul>
-    {% for course in all_courses %}
-      <li><a href="/course/{{ course.id }}">{{ course.name }}</a></li>
-    {% else %}
-      <li>Ei kursseja.</li>
-    {% endfor %}
-  </ul>
+    {% endif %}
 
-  <h2>Merkinnät</h2>
-  <ul>
-    {% for entry in all_entries %}
-      <li>
-        <a href="/entry/{{ entry.id }}">{{ entry.title }}</a><br>
-        {% if entry.course_name %}
-          Kurssi: <a href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
-        {% endif %}
-      </li>
-    {% else %}
-      <li>Ei merkintöjä.</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-
-  {% if not session.username %}
-  <p>
-    <a href="/login">Kirjaudu sisään</a> |
-    <a href="/register">Rekisteröidy</a>
-  </p>
-  {% endif %}
+    {% if not session.username %}
+    <header class="top-bar">
+      <h1 class="top-bar-title">Opintokalenteri</h1>
+      <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/login">Kirjaudu sisään</a>
+        <a class="btn btn--ghost" href="/register">Rekisteröidy</a>
+      </nav>
+    </header>
+    <div class="center-page">
+      <h3> Tervetuloa Opintokalenteriin! </h3>
+      <br>
+      <p>
+          Opintokalenteri on työkalu opiskelijoille, joka auttaa hallitsemaan opintosuorituksia ja tehtäviä.<br>
+          Voit lisätä merkintöjä, kuten tenttejä, esseitä, harjoitustehtäviä, projekteja ja muita tehtäviä. Opintokalenterin avulla pysyt kaikissa opinnoissasi hyvin kyydissä. <br>
+          <br>
+          Rekisteröidy tai kirjaudu sisään aloittaaksesi!
+      </p>
+    </div>
+    {% endif %}
 </body>
 
 </html>

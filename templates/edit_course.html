@@ -4,20 +4,49 @@
   <title>Kurssin muokkaus</title>
 </head>
 
-<body>
-    <h1>Kurssin {{ course.name }} muokkaus</h1>
-  <form action="/edit_course/{{ course.id }}" method="post">
-    <p>
-      Otsikko: <br />
-      <input type="text" name="name" value="{{ course.name }}" maxlength="50" required />
-    </p>
-    <p>
-        Kuvaus: <br />
-        <textarea name="description" rows="5" cols="40" maxlength="1000">{{ course.description }}</textarea>
-    </p>
-    <input type="hidden" name="course_id" value="{{ course.id }}" />
-    <input type="submit" value="Tallenna muutokset" />
-  </form>
+<link rel="stylesheet" href="/static/main.css">
+
+<body class="center-page">
+    {% if session.username %}
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <br>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/">Etusivu</a>
+        <a class="btn btn--ghost" href="/new_course">Lisää kurssi</a>
+        <a class="btn btn--ghost" href="/new_entry">Uusi merkintä</a>
+        <a class="btn btn--ghost" href="/find_entry">Etsi merkintä</a>
+        <a class="btn btn--ghost" href="/user/{{ session.username }}">Omat sivut</a>
+        <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
+        </nav>
+    </header>
+    <header class="form-top-bar">
+        <h1 class="form-top-bar-title">Kurssin {{ course.name }} muokkaus</h1>
+    </header>
+    <form class="form" action="/edit_course/{{ course.id }}" method="post">
+      <p>
+        Otsikko: <br />
+        <input type="text" name="name" value="{{ course.name }}" maxlength="50" required />
+      </p>
+      <p>
+          Kuvaus: <br />
+          <textarea name="description" rows="5" cols="40" maxlength="1000">{{ course.description }}</textarea>
+      </p>
+      <input type="hidden" name="course_id" value="{{ course.id }}" />
+      <input type="submit" value="Tallenna muutokset" class="btn btn--small"/>
+      <input type="submit" value="Peruuta" class="btn btn--small" formaction="/course/{{ course.id }}" />
+    </form>
+    {% endif %}
+
+    {% if not session.username %}
+      <header class="top-bar">
+          <h1 class="top-bar-title">Opintokalenteri</h1>
+          <nav class="top-bar-actions">
+          <a class="btn btn--ghost" href="/login">Kirjaudu sisään</a>
+          <a class="btn btn--ghost" href="/register">Rekisteröidy</a>
+          </nav>
+      </header>
+    {% endif %}
 </body>
 
 </html>

@@ -4,8 +4,13 @@
   <title>Rekisteröinti</title>
 </head>
 
-<body>
-  <form action="/create" method="post">
+<link rel="stylesheet" href="/static/main.css">
+
+<body class="center-page">
+  <header class="form-top-bar">
+    <h1 class="form-top-bar-title">Rekisteröinti</h1>
+  </header>
+  <form class="form-style" action="/create" method="post">
     <p>
       Tunnus: <br />
       <input type="text" name="username" />
@@ -18,7 +23,11 @@
       Salasana uudestaan: <br />
       <input type="password" name="password2" />
     </p>
-    <input type="submit" value="Luo tunnus" />
+    <input type="submit" value="Luo tunnus" class="btn btn--small"/>
+    <br>
+    <p>Oletko jo käyttäjä?</p>
+    <a href="/login" class="btn btn--small btn--ghost">Kirjaudu sisään</a>
+    <a href="/" class="btn btn--small btn--ghost">Palaa etusivulle</a>
   </form>
 </body>
 

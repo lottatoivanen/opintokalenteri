@@ -1,0 +1,31 @@
+<html>
+
+<head>
+  <title>Kaikki kurssit</title>
+</head>
+
+<link rel="stylesheet" href="/static/main.css">
+
+<body>
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <br>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/">Etusivu</a>
+        <a class="btn btn--ghost" href="/new_course">Lisää kurssi</a>
+        <a class="btn btn--ghost" href="/new_entry">Uusi merkintä</a>
+        <a class="btn btn--ghost" href="/find_entry">Etsi merkintä</a>
+        <a class="btn btn--ghost" href="/user/{{ session.username }}">Omat sivut</a>
+        <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
+        </nav>
+    </header>
+    <h2>Kaikki kurssit</h2>
+    <ul>
+        {% for course in all_courses %}
+            <li><a class="btn btn--link" href="/course/{{ course.id }}">{{ course.name }}</a></li>
+        {% else %}
+            <li>Ei kursseja.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

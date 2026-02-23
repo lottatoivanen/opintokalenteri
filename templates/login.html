@@ -1,30 +1,39 @@
 <html>
 
 <head>
-  <title>Kirjautuminen</title>
+    <title>Kirjautuminen</title>
 </head>
 
-<body>
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  <p>
-    <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-  <form action="/login" method="post">
+<link rel="stylesheet" href="/static/main.css">
+
+<body class="center-page">
+    <header class="form-top-bar">
+        <h1 class="form-top-bar-title">Kirjaudu sisään</h1>
+    </header>
+    {% if session.username %}
     <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
+        Olet kirjautunut nimellä {{ session.username }}
     </p>
     <p>
-      Salasana: <br />
-      <input type="password" name="password" />
+        <a href="/logout">Kirjaudu ulos</a>
     </p>
-    <input type="submit" value="Kirjaudu" />
-  </form>
-  {% endif %}
+    {% else %}
+    <form class="form-style" action="/login" method="post">
+        <p>
+            Tunnus: <br />
+            <input type="text" name="username" />
+        </p>
+        <p>
+            Salasana: <br />
+            <input type="password" name="password" />
+        </p>
+        <input type="submit" value="Kirjaudu" class="btn btn--small"/>
+        <br>
+        <p>Etkö ole vielä käyttäjä?</p>
+        <a href="/register" class="btn btn--small btn--ghost">Rekisteröidy</a>
+        <a href="/" class="btn btn--small btn--ghost">Palaa etusivulle</a>
+      </form>
+    {% endif %}
 </body>
 
 </html>

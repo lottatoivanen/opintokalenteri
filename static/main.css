@@ -1,0 +1,189 @@
+.reference {
+    padding-left: 40px;
+}
+
+.bottom {
+    padding-bottom: 10px;
+}
+
+:root {
+    --bg-color:   #f9dbde;
+    --text-green: #274e37;
+    --green-light:#739671;
+    --pink-mid:   #F6B0BB;
+    --pink-light: #F1C8CB;
+    --white:      #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    padding: 40px;
+    background-color: var(--bg-color);
+    color: var(--text-green);
+    font-family: "Georgia", serif;
+    line-height: 1.6;
+    font-size: 1.25rem;
+}
+
+/* Etusivu - TOP BAR */
+.top-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: var(--green-light);
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    border-radius: 0;
+}
+
+.top-bar__title h1 {
+    font-size: 3.5rem;
+    margin-bottom: 4px;
+}
+
+.top-bar__title p {
+    font-size: 0.95rem;
+    color: var(--green-light);
+    justify-content: center;
+}
+
+.top-bar__actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* NAPIT & LINKIT */
+.btn {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 1.2rem;
+    font-family: "Georgia", serif;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition:
+        transform 0.08s ease,
+        background-color 0.12s ease,
+        border-color 0.12s ease;
+    white-space: nowrap;
+}
+
+.btn--ghost {
+    background-color: transparent;
+    color: var(--pink-light);
+    font-size: 1.2rem;
+}
+
+.btn--ghost:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.btn--small {
+    margin-top: 10px;
+    background-color: var(--pink-light);
+    color: var(--text-green);
+    font-size: 1rem;
+}
+
+.btn--small:hover {
+    background-color: var(--pink-mid);
+}
+
+.btn--link {
+    color: var(--text-green);
+}
+
+/* Lomakkeet */
+form {
+    margin-top: 20px;
+    font-family: Georgia, serif;
+    font-size: 1.2rem;
+}
+
+.form-style {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    font-size: 1.2rem;
+    font-family: Georgia, serif;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-row label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: var(--green-soft);
+}
+
+.form-style input[type="text"], 
+.form-style input[type="date"],
+.form-style textarea,
+.form-style select,
+.form-style option {
+    padding: 5px;
+    font-size: 1rem;
+    font-family: "Georgia", serif;
+    color: var(--text-green);
+    border: 1px solid var(--green-light);
+    border-radius: 3px; 
+    background-color: var(--white);
+}
+
+.form-top-bar {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto 20px;
+}
+
+.form-top-bar__title h2 {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+/* Select */
+.select-field {
+    padding: 5px;
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    color: var(--text-green);
+    border: 2px solid var(--green-light);
+    border-radius: 3px;
+    background-color: var(--white);
+}
+
+
+.center-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+}

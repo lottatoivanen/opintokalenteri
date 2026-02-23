@@ -4,28 +4,64 @@
   <title>{{ course.name }}</title>
 </head>
 
-<body>
-    <h1>{{ course.name }}</h1>
-    <a href="/edit_course/{{ course.id }}">Muokkaa kurssia</a><br>
-    <a href="/delete_course/{{ course.id }}">Poista kurssi</a>
+<link rel="stylesheet" href="/static/main.css">
+
+<body class="center-page">
+    {% if session.username %}
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <br>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/">Etusivu</a>
+        <a class="btn btn--ghost" href="/new_entry">Uusi merkintä</a>
+        <a class="btn btn--ghost" href="/user/{{ session.username }}">Omat sivut</a>
+        <a class="btn btn--ghost" href="/find_entry">Etsi merkintä</a>
+        <a class="btn btn--ghost" href="/new_course">Lisää kurssi</a>
+        <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
+        </nav>
+    </header>
+
+    <header class="form-top-bar">
+        <h2 class="form-top-bar-title">{{ course.name }}</h2>
+    </header>
     <p>
-        Kuvaus: <br />
+        <b>Kuvaus:</b> <br />
         {{ course.description }}
     </p>
-    <a href="/new_entry?course_id={{ course.id }}">Lisää merkintä</a>
-    <h2> Merkinnät </h2>
+    <p>
+        <b>Lisännyt käyttäjä:</b> <a href="/user/{{ course.username }}">{{ course.username }}</a>
+    </p>
+        {% if owner %}
+        <nav class="top-bar-actions">
+            <a href="/edit_course/{{ course.id }}" class="btn btn--small">Muokkaa kurssia</a>
+            <a href="/delete_course/{{ course.id }}" class="btn btn--small">Poista kurssi</a>
+            <a href="/new_entry?course_id={{ course.id }}" class="btn btn--small">Lisää merkintä </a>
+        </nav>
+        {% endif %}
+    <br>
+    <h3> Merkinnät </h3>
         <p>
             {% if entries %}
                 <ul>
                 {% for entry in entries %}
-                    <li><a href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
+                    <li><a href="/entry/{{ entry.id }}" class="btn btn--link">{{ entry.title }}</a></li>
                 {% endfor %}
                 </ul>
             {% else %}
                 Ei merkintöjä.
             {% endif %}
+        <p><a href="/" class="btn btn--small">Takaisin etusivulle</a></p>
+    {% endif %}
 
-    <p><a href="/">Takaisin etusivulle</a></p>
+    {% if not session.username %}
+    <header class="top-bar">
+        <h1 class="top-bar-title">Opintokalenteri</h1>
+        <nav class="top-bar-actions">
+        <a class="btn btn--ghost" href="/login">Kirjaudu sisään</a>
+        <a class="btn btn--ghost" href="/register">Rekisteröidy</a>
+        </nav>
+    </header>
+    {% endif %}
 </body>
 
 </html>
