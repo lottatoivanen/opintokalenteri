@@ -77,31 +77,34 @@ def create_entry():
         all_courses = user.get_courses_by_user(session["user_id"])
         all_tags = entries.get_all_tags()
         return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id, all_tags=all_tags)
-    if "cancel" in request.form:
-        return redirect("/")
-    else:
-        title = request.form["title"]
-        if not title or len(title) > 50:
-            return abort(403)
-        description = request.form["description"]
-        if not description or len(description) > 1000:
-            return abort(403)
-        date = request.form["date"]
-        try:
-            datetime.strptime(date, "%Y-%m-%d")
-        except (ValueError, TypeError):
-            abort(403)
-        user_id = session["user_id"]
-        tags = []
-        for entry in request.form.getlist("tags"):
-            if entry:
-                parts = entry.split(":")
-                tags.append((parts[0], parts[1]))
-        tags = list(set(tags))
-        course_id = request.form.get("course_id")
-        course_id = int(course_id) if course_id else None
-        entries.add_entry(title, description, date, user_id, course_id, tags)
-        return redirect("/")
+    title = request.form["title"]
+    if not title or len(title) > 50:
+        return abort(403)
+    description = request.form["description"]
+    if not description or len(description) > 1000:
+        return abort(403)
+    date = request.form["date"]
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        abort(403)
+    user_id = session["user_id"]
+    course_id = request.form.get("course_id")
+    course_id = int(course_id) if course_id else None
+    all_courses = user.get_courses_by_user(session["user_id"])
+    if course_id and not any(course["id"] == course_id for course in all_courses):
+        return abort(403)
+    all_tags = entries.get_all_tags()
+    tags = []
+    for entry in request.form.getlist("tags"):
+        if entry:
+            parts = entry.split(":")
+            if parts[0] not in all_tags or parts[1] not in all_tags[parts[0]]:
+                return abort(403)
+            tags.append((parts[0], parts[1]))
+    tags = list(set(tags))
+    entries.add_entry(title, description, date, user_id, course_id, tags)
+    return redirect("/")
 
 @app.route("/edit_entry/<int:entry_id>")
 def edit_entry(entry_id):
@@ -139,10 +142,16 @@ def update_entry(entry_id):
         abort(403)
     course_id = request.form.get("course_id")
     course_id = int(course_id) if course_id else None
+    all_courses = user.get_courses_by_user(session["user_id"])
+    if course_id and not any(course["id"] == course_id for course in all_courses):
+        return abort(403)
+    all_tags = entries.get_all_tags()
     tags = []
     for entry in request.form.getlist("tags"):
         if entry:
             parts = entry.split(":")
+            if parts[0] not in all_tags or parts[1] not in all_tags[parts[0]]:
+                return abort(403)
             tags.append((parts[0], parts[1]))
     tags = list(set(tags))
     if "update" in request.form:
