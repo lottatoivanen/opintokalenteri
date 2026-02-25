@@ -19,7 +19,7 @@
         <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
         </nav>
     </header>
-    <h2>Kaikki kurssit</h2>
+    <h2>Muiden käyttäjien kurssit</h2>
     <ul>
         {% for course in all_courses %}
             <li><a class="btn btn--link" href="/course/{{ course.id }}">{{ course.name }}</a></li>

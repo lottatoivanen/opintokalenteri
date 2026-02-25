@@ -52,9 +52,7 @@ def show_entry(entry_id):
     entry = entries.get_entry(entry_id)
     if not entry:
         return abort(404)
-    if entry["user_id"] != session["user_id"]:
-        return abort(403)
-    return render_template("show_entry.html", entry=entry)
+    return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]))
 
 @app.route("/new_entry")
 def new_entry():
@@ -168,10 +166,8 @@ def show_course(course_id):
     course = courses.get_course(course_id)
     if not course:
         return abort(404)
-    if course["user_id"] != session["user_id"]:
-        return abort(403)
     course_entries = entries.get_entries_by_course(course_id)
-    return render_template("show_course.html", course=course, entries=course_entries)
+    return render_template("show_course.html", course=course, entries=course_entries, owner=(course["user_id"] == session["user_id"]))
 
 @app.route("/edit_course/<int:course_id>")
 def edit_course(course_id):
@@ -215,6 +211,12 @@ def delete_course(course_id):
         return redirect("/")
     else:
         return redirect("/course/" + str(course_id))
+
+@app.route("/all_courses")
+def all_courses():
+    require_login()
+    all_courses = user.get_all_courses_except_user(session["user_id"])
+    return render_template("all_courses.html", all_courses=all_courses)
 
 ### kirjautuminen ja rekisteröityminen ###
 

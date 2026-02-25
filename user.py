@@ -16,6 +16,10 @@ def get_courses_by_user(user_id):
     sql = """SELECT id, name FROM courses WHERE user_id = ?"""
     return db.query(sql, [user_id])
 
+def get_all_courses_except_user(user_id):
+    sql = """SELECT courses.id, courses.name, courses.description, courses.user_id, users.username AS username FROM courses JOIN users ON users.id = courses.user_id WHERE courses.user_id != ?"""
+    return db.query(sql, [user_id])
+
 def create_user(username, password):
     password_hash = generate_password_hash(password)
     sql = """INSERT INTO users (username, password_hash) VALUES (?, ?)"""
