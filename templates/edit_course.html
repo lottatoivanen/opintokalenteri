@@ -29,14 +29,15 @@
         Otsikko: <br />
         <input type="text" name="name" value="{{ course.name }}" maxlength="50" required />
       </p>
+      <br>
       <p>
           Kuvaus: <br />
           <textarea name="description" rows="5" cols="40" maxlength="1000">{{ course.description }}</textarea>
       </p>
       <br>
       <input type="hidden" name="course_id" value="{{ course.id }}" />
-      <input type="submit" value="Tallenna muutokset" class="btn btn--small"/>
-      <input type="submit" value="Peruuta" class="btn btn--small" formaction="/course/{{ course.id }}" />
+      <input type="submit" name="update" value="Tallenna muutokset" class="btn btn--small"/>
+      <input type="submit" name="cancel" value="Peruuta" class="btn btn--small"/>
     </form>
     {% endif %}
 

@@ -29,9 +29,11 @@
         <b>Kuvaus:</b> <br />
         {{ course.description }}
     </p>
+    <br>
     <p>
         <b>Lisännyt käyttäjä:</b> <a href="/user/{{ course.username }}">{{ course.username }}</a>
     </p>
+    <br>
         {% if owner %}
         <nav class="top-bar-actions">
             <a href="/edit_course/{{ course.id }}" class="btn btn--small">Muokkaa kurssia</a>

@@ -31,14 +31,32 @@
         </p>
         <input type="submit" value="Etsi merkintöjä" class="btn btn--small"/>
     </form>
+    <br>
 
         {% if query %}
         <h2>Hakutulokset</h2>
+        <br>
+        <h3>Omat kalenterimerkinnät</h3>
+        <br>
         <ul>
         {% for entry in results %}
             <li>
             <a href="/entry/{{ entry.id }}" class="btn btn--link">{{ entry.title }}</a><br>
             Aikaraja: {{ entry.date }}
+            </li>
+        {% else %}
+            <li>Ei merkintöjä hakusanalla "{{ query }}".</li>
+        {% endfor %}
+        </ul>
+        <br>
+        <h3>Muiden käyttäjien merkinnät</h3>
+        <br>
+        <ul>
+        {% for entry in other_results %}
+            <li>
+            <a href="/entry/{{ entry.id }}" class="btn btn--link">{{ entry.title }}</a><br>
+            Aikaraja: {{ entry.date }}
+            Lisännyt käyttäjä: <a href="/user/{{ entry.username }}">{{ entry.username }}</a>
             </li>
         {% else %}
             <li>Ei merkintöjä hakusanalla "{{ query }}".</li>

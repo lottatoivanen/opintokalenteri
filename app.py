@@ -42,12 +42,14 @@ def find_entry():
     require_login()
     query = request.args.get("query")
     if query:
-        results = entries.find_entry(query)
+        results = entries.find_entry_user(query)
+        other_results = entries.find_entry_other_users(query)
     else:
         query = ""
         results = []
+        other_results = []
     all_tags = entries.get_all_tags()
-    return render_template("find_entry.html", query=query, results=results, all_tags=all_tags)
+    return render_template("find_entry.html", query=query, results=results, other_results=other_results, all_tags=all_tags)
 
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
@@ -221,8 +223,11 @@ def update_course(course_id):
     description = request.form["description"]
     if len(description) > 1000:
         return abort(403) 
-    courses.update_course(course_id, name, description)
-    return redirect("/course/" + str(course_id))
+    if "update" in request.form:
+        courses.update_course(course_id, name, description)
+        return redirect("/course/" + str(course_id))
+    else:
+        return redirect("/course/" + str(course_id))
 
 @app.route("/delete_course/<int:course_id>", methods=["GET", "POST"])
 def delete_course(course_id):
