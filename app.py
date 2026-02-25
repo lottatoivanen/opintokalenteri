@@ -21,7 +21,8 @@ def index():
         return render_template("index.html", all_entries=[], all_courses=[])
     all_entries = user.get_entries_by_user(session["user_id"])
     all_courses = user.get_courses_by_user(session["user_id"])
-    return render_template("index.html", all_entries=all_entries, all_courses=all_courses)
+    all_tags = entries.get_all_tags()
+    return render_template("index.html", all_entries=all_entries, all_courses=all_courses, all_tags=all_tags)
 
 ### merkinnät ###
 
@@ -33,7 +34,8 @@ def user_entries(username):
         return abort(404)
     e = user.get_entries_by_user(u["id"])
     c = user.get_courses_by_user(u["id"])
-    return render_template("show_user.html", user=u, entries=e, courses=c)    
+    all_tags = entries.get_all_tags()
+    return render_template("show_user.html", user=u, entries=e, courses=c, all_tags=all_tags)    
 
 @app.route("/find_entry")
 def find_entry():
@@ -44,7 +46,8 @@ def find_entry():
     else:
         query = ""
         results = []
-    return render_template("find_entry.html", query=query, results=results)
+    all_tags = entries.get_all_tags()
+    return render_template("find_entry.html", query=query, results=results, all_tags=all_tags)
 
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
@@ -52,14 +55,17 @@ def show_entry(entry_id):
     entry = entries.get_entry(entry_id)
     if not entry:
         return abort(404)
-    return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]))
+    tags = entries.get_tags(entry_id)
+    all_tags = entries.get_all_tags()
+    return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]), tags=tags, all_tags=all_tags)
 
 @app.route("/new_entry")
 def new_entry():
     require_login()
     course_id = request.args.get("course_id")
     all_courses = user.get_courses_by_user(session["user_id"])
-    return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id)
+    all_tags = entries.get_all_tags()
+    return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id, all_tags=all_tags)
 
 @app.route("/create_entry", methods=["GET", "POST"])
 def create_entry():
@@ -67,23 +73,33 @@ def create_entry():
     if request.method == "GET":
         course_id = request.args.get("course_id")
         all_courses = user.get_courses_by_user(session["user_id"])
-        return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id)
-    title = request.form["title"]
-    if not title or len(title) > 50:
-        return abort(403)
-    description = request.form["description"]
-    if not description or len(description) > 1000:
-        return abort(403)
-    date = request.form["date"]
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
-    except (ValueError, TypeError):
-        abort(403)
-    user_id = session["user_id"]
-    course_id = request.form.get("course_id")
-    course_id = int(course_id) if course_id else None
-    entries.add_entry(title, description, date, user_id, course_id)
-    return redirect("/")
+        all_tags = entries.get_all_tags()
+        return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id, all_tags=all_tags)
+    if "cancel" in request.form:
+        return redirect("/")
+    else:
+        title = request.form["title"]
+        if not title or len(title) > 50:
+            return abort(403)
+        description = request.form["description"]
+        if not description or len(description) > 1000:
+            return abort(403)
+        date = request.form["date"]
+        try:
+            datetime.strptime(date, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            abort(403)
+        user_id = session["user_id"]
+        tags = []
+        for entry in request.form.getlist("tags"):
+            if entry:
+                parts = entry.split(":")
+                tags.append((parts[0], parts[1]))
+        tags = list(set(tags))
+        course_id = request.form.get("course_id")
+        course_id = int(course_id) if course_id else None
+        entries.add_entry(title, description, date, user_id, course_id, tags)
+        return redirect("/")
 
 @app.route("/edit_entry/<int:entry_id>")
 def edit_entry(entry_id):
@@ -93,8 +109,10 @@ def edit_entry(entry_id):
         return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
+    all_tags = entries.get_all_tags()
+    entry_tags = entries.get_tags(entry_id)
     all_courses = user.get_courses_by_user(session["user_id"])
-    return render_template("edit_entry.html", entry=entry, all_courses=all_courses)
+    return render_template("edit_entry.html", entry=entry, all_courses=all_courses, all_tags=all_tags, entry_tags=entry_tags)
 
 @app.route("/edit_entry/<int:entry_id>", methods=["POST"])
 def update_entry(entry_id):
@@ -119,19 +137,29 @@ def update_entry(entry_id):
         abort(403)
     course_id = request.form.get("course_id")
     course_id = int(course_id) if course_id else None
-    entries.update_entry(entry_id, title, description, date, course_id)
-    return redirect("/entry/" + str(entry_id))
+    tags = []
+    for entry in request.form.getlist("tags"):
+        if entry:
+            parts = entry.split(":")
+            tags.append((parts[0], parts[1]))
+    tags = list(set(tags))
+    if "update" in request.form:
+        entries.update_entry(entry_id, title, description, date, course_id, tags)
+        return redirect("/entry/" + str(entry_id))
+    else:
+        return redirect("/entry/" + str(entry_id))
 
 @app.route("/delete_entry/<int:entry_id>", methods=["GET", "POST"])
 def delete_entry(entry_id):
     require_login()
     entry = entries.get_entry(entry_id)
+    entry_tags = entries.get_tags(entry_id)
     if not entry:
         return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
     if request.method == "GET":
-        return render_template("delete_entry.html", entry=entry)
+        return render_template("delete_entry.html", entry=entry, entry_tags=entry_tags)
     if "delete" in request.form:
         entries.delete_entry(entry_id)
         return redirect("/")

@@ -22,7 +22,7 @@
         </nav>
     </header>
 
-  <form class="form" action="/edit_entry/{{ entry.id }}" method="post">
+  <form class="form-style" action="/edit_entry/{{ entry.id }}" method="post">
     <p>
       Otsikko: <br />
       <input type="text" name="title" value="{{ entry.title }}" maxlength="50" required />
@@ -44,8 +44,19 @@
         {% endfor %}
       </select>
     </p>
+    {% for tag in all_tags %}
+    <p>
+      {{ tag }}: <br />
+      {% for value in all_tags[tag] %}
+        <input type="checkbox" name="tags" value="{{ tag }}:{{ value }}" {% if (tag, value) in entry_tags %}checked{% endif %}> {{ value }}<br />
+      {% endfor %}
+    </p>
+    {% endfor %}
+    <br>
     <input type="hidden" name="entry_id" value="{{ entry.id }}" />
-    <input type="submit" value="Tallenna muutokset" class="btn btn--small"/>
+    <input type="hidden" name="entry_tags" value="{{ entry_tags }}" />
+    <input type="submit" name="update" value="Tallenna muutokset" class="btn btn--small"/>
+    <input type="submit" name="cancel" value="Peruuta" class="btn btn--small" />
   </form>
     {% endif %}
 

@@ -50,8 +50,18 @@
           {% endfor %}
         </select>
     </p>
-    <input type="submit" value="Luo merkintä" class="btn btn--small"/>
+    {% for tag in all_tags %}
+        <p>
+        {{ tag }}: <br />
+        {% for value in all_tags[tag] %}
+            <input type="checkbox" name="tags" value="{{ tag }}:{{ value }}"> {{ value }}<br />
+        {% endfor %}
+        </p>
+    {% endfor %}
+    <input type="submit" name="create" value="Luo merkintä" class="btn btn--small"/>
+    <a href="/" class="btn btn--small">Peruuta</a>
   </form>
+
   {% endif %}
 
     {% if not session.username %}

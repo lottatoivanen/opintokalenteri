@@ -36,6 +36,24 @@
     <p>
         <b>Lisännyt käyttäjä:</b> <a href="/user/{{ entry.username }}">{{ entry.username }}</a>
     </p>
+    <p>
+        <b>Kurssi:</b>
+        {% if entry.course_name %}
+            <a href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
+        {% else %}
+            Ei kurssia
+        {% endif %}
+    </p>
+    <p>
+        <b>Kategoriat:</b>
+        {% if tags %}
+            {% for title, value in tags %}
+            <li>{{ value }}</li>
+            {% endfor %}
+        {% else %}
+            Ei kategorioita
+        {% endif %}
+    </p>
 
         {% if owner %}
         <a href="/edit_entry/{{ entry.id }}" class="btn btn--small">Muokkaa merkintää</a><br>
