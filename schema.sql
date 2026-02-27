@@ -10,8 +10,16 @@ CREATE TABLE entries (
     description TEXT,
     date DATE,
     user_id INTEGER REFERENCES users,
-    course_id INTEGER REFERENCES courses
-    
+    course_id INTEGER REFERENCES courses 
+);
+
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    comment TEXT,
+    date DATE,
+    user_id INTEGER REFERENCES users,
+    entry_id INTEGER REFERENCES entries ON DELETE CASCADE,
+    course_id INTEGER REFERENCES courses ON DELETE CASCADE
 );
 
 CREATE TABLE courses (

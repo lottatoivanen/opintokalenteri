@@ -6,6 +6,7 @@ import db
 import entries
 import user
 import courses
+import comments
 from datetime import datetime
 
 app = Flask(__name__)
@@ -24,7 +25,7 @@ def index():
     all_tags = entries.get_all_tags()
     return render_template("index.html", all_entries=all_entries, all_courses=all_courses, all_tags=all_tags)
 
-### merkinnät ###
+### entries ###
 
 @app.route("/user/<username>")
 def user_entries(username):
@@ -59,7 +60,8 @@ def show_entry(entry_id):
         return abort(404)
     tags = entries.get_tags(entry_id)
     all_tags = entries.get_all_tags()
-    return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]), tags=tags, all_tags=all_tags)
+    entry_comments = comments.get_comments_entry(entry_id)
+    return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]), tags=tags, all_tags=all_tags, comments=entry_comments)
 
 @app.route("/new_entry")
 def new_entry():
@@ -177,7 +179,7 @@ def delete_entry(entry_id):
     else:
         return redirect("/entry/" + str(entry_id))
 
-### kurssit ###
+### courses ###
 
 @app.route("/new_course")
 def new_course():
@@ -206,7 +208,8 @@ def show_course(course_id):
     if not course:
         return abort(404)
     course_entries = entries.get_entries_by_course(course_id)
-    return render_template("show_course.html", course=course, entries=course_entries, owner=(course["user_id"] == session["user_id"]))
+    course_comments = comments.get_comments_course(course_id)
+    return render_template("show_course.html", course=course, entries=course_entries, owner=(course["user_id"] == session["user_id"]), comments=course_comments)
 
 @app.route("/edit_course/<int:course_id>")
 def edit_course(course_id):
@@ -260,7 +263,51 @@ def all_courses():
     all_courses = user.get_all_courses_except_user(session["user_id"])
     return render_template("all_courses.html", all_courses=all_courses)
 
-### kirjautuminen ja rekisteröityminen ###
+### comments ###
+
+@app.route("/add_comment_entry/<int:entry_id>", methods=["POST"])
+def add_comment_entry(entry_id):
+    require_login()
+    entry = entries.get_entry(entry_id)
+    if not entry:
+        return abort(404)
+    comment = request.form["comment"]
+    if not comment or len(comment) > 1000:
+        return abort(403)
+    user_id = session["user_id"]
+    comments.add_comment_entry(entry_id, user_id, comment)
+    return redirect("/entry/" + str(entry_id))
+
+@app.route("/add_comment_course/<int:course_id>", methods=["POST"])
+def add_comment_course(course_id):
+    require_login()
+    course = courses.get_course(course_id)
+    if not course:
+        return abort(404)
+    comment = request.form["comment"]
+    if not comment or len(comment) > 1000:
+        return abort(403)
+    user_id = session["user_id"]
+    comments.add_comment_course(course_id, user_id, comment)
+    return redirect("/course/" + str(course_id))
+
+@app.route("/delete_comment/<int:comment_id>", methods=["POST"])
+def delete_comment(comment_id):
+    require_login()
+    comment = comments.get_comment(comment_id)
+    if not comment:
+        return abort(404)
+    if comment["user_id"] != session["user_id"]:
+        return abort(403)
+    entry_id = comment["entry_id"]
+    comments.delete_comment(comment_id)
+    if comment["entry_id"]:
+        return redirect("/entry/" + str(entry_id))
+    else:
+        course_id = comment["course_id"]
+        return redirect("/course/" + str(course_id))
+
+### sign up, login, logout ###
 
 @app.route("/register")
 def register():

@@ -64,7 +64,46 @@
         <a href="/delete_entry/{{ entry.id }}" class="btn btn--small">Poista merkintä</a>
         {% endif %}
 
+    <br>
 
+    <div class="comment-box">
+    <form class="form-style" action="/add_comment_entry/{{ entry.id }}" method="post">
+        <input type="hidden" name="entry_id" value="{{ entry.id }}">
+        <h3>Kommentoi merkintään</h3>
+        <br>
+        <p>
+            <textarea name="comment" rows="4" cols="50" required></textarea>
+        </p>
+        <br>
+        <p>
+            <button type="submit" class="btn btn--small">Lähetä kommentti</button>
+        </p>
+        <br>
+    </form>
+    <h3>Kommentit</h3>
+    <p>
+        {% if comments %}
+            <ul>
+            {% for comment in comments %}
+                <div class="comment">
+                    <div class="author"><a href="/user/{{ comment.username }}">{{ comment.username }}</a></div>
+                    <div class="date">{{ comment.date }}</div>
+                    <div class="content">{{ comment.comment }}</div>
+                    {% if session.user_id == comment.user_id %}
+                        <form action="/delete_comment/{{ comment.id }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn--smallwhite">Poista kommentti</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            </ul>
+        {% else %}
+            Ei kommentteja.
+        {% endif %}
+    </p>
+    </div>
+    <br>
+    <p><a href="/" class="btn btn--small">Takaisin etusivulle</a></p>
     {% endif %}
 
     {% if not session.username %}

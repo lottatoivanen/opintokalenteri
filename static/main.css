@@ -30,7 +30,7 @@ body {
     font-size: 1.25rem;
 }
 
-/* Etusivu - TOP BAR */
+/* top bar */
 .top-bar {
     display: flex;
     flex-direction: column;
@@ -62,7 +62,7 @@ body {
     justify-content: center;
 }
 
-/* NAPIT & LINKIT */
+/* napit ja linkit */
 .btn {
     margin-top: 10px;
     display: inline-flex;
@@ -106,7 +106,18 @@ body {
     color: var(--text-green);
 }
 
-/* Lomakkeet */
+.btn--smallwhite{
+    margin-top: 10px;
+    background-color: var(--white);
+    color: var(--text-green);
+    font-size: 1rem;
+}
+
+.btn--smallwhite:hover {
+    background-color: var(--bg-color);
+}
+
+/* lomakkeet */
 form {
     margin-top: 20px;
     font-family: Georgia, serif;
@@ -168,7 +179,8 @@ form {
     margin-bottom: 4px;
 }
 
-/* Select */
+
+/* select */
 .select-field {
     padding: 5px;
     font-size: 1rem;
@@ -179,7 +191,7 @@ form {
     background-color: var(--white);
 }
 
-
+/* keskityspainotteinen sivu */
 .center-page {
     display: flex;
     flex-direction: column;
@@ -187,4 +199,44 @@ form {
     min-height: 100vh;
     text-align: center;
     list-style-position: inside;
+}
+
+/* kommentit */
+.comment {
+    background-color: var(--pink-light);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 500px;
+    max-width: 100%;
+}
+
+.comment .author {
+    font-weight: bold;
+    color: var(--text-green);
+    margin-bottom: 5px;
+}
+
+.comment .date {
+    font-size: 0.85rem;
+    color: var(--text-green-light);
+}
+
+.comment .content {
+    margin-top: 10px;
+    color: var(--text-green);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.comment-box {
+    padding: 20px;
+    font-size: 1rem;
+    font-family: "Georgia", serif;
+    color: var(--text-green);
+    border: 1px solid var(--green-light);
+    border-radius: 15px; 
+    background-color: var(--white);
 }
