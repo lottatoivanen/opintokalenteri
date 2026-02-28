@@ -23,7 +23,8 @@
     <h2>Muiden käyttäjien kurssit</h2>
     <ul>
         {% for course in all_courses %}
-            <li><a class="btn btn--link" href="/course/{{ course.id }}">{{ course.name }}</a></li>
+            <li><a class="btn btn--link" href="/course/{{ course.id }}">{{ course.name }}</a><br>
+            Lisännyt käyttäjä: <a class="btn btn--link" href="/user/{{ course.username }}">{{ course.username }}</a></li>
         {% else %}
             <li>Ei kursseja.</li>
         {% endfor %}

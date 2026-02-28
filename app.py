@@ -8,12 +8,13 @@ import user
 import courses
 import comments
 from datetime import datetime
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 def check_csrf():
-    if request.form["csrf_token"] != session["csrf_token"]:
+    if request.form["csrf_token"] != session["csrf_token"] or not request.form["csrf_token"] or not session["csrf_token"]:
         abort(403)
 
 def require_login():
@@ -78,6 +79,7 @@ def new_entry():
 @app.route("/create_entry", methods=["GET", "POST"])
 def create_entry():
     require_login()
+    check_csrf()
     if request.method == "GET":
         course_id = request.args.get("course_id")
         all_courses = user.get_courses_by_user(session["user_id"])
@@ -128,6 +130,7 @@ def edit_entry(entry_id):
 @app.route("/edit_entry/<int:entry_id>", methods=["POST"])
 def update_entry(entry_id):
     require_login()
+    check_csrf()
     entry_id = request.form["entry_id"]
     entry = entries.get_entry(entry_id)
     if not entry:
@@ -169,6 +172,7 @@ def update_entry(entry_id):
 @app.route("/delete_entry/<int:entry_id>", methods=["GET", "POST"])
 def delete_entry(entry_id):
     require_login()
+    check_csrf()
     entry = entries.get_entry(entry_id)
     entry_tags = entries.get_tags(entry_id)
     if not entry:
@@ -193,6 +197,7 @@ def new_course():
 @app.route("/create_course", methods=["GET", "POST"])
 def create_course():
     require_login()
+    check_csrf()
     if request.method == "GET":
         return render_template("new_course.html")
     name = request.form["name"]
@@ -226,6 +231,7 @@ def edit_course(course_id):
 @app.route("/edit_course/<int:course_id>", methods=["POST"])
 def update_course(course_id):
     require_login()
+    check_csrf()
     course_id = request.form["course_id"]
     course = courses.get_course(course_id)
     if not course:
@@ -248,6 +254,7 @@ def update_course(course_id):
 @app.route("/delete_course/<int:course_id>", methods=["GET", "POST"])
 def delete_course(course_id):
     require_login()
+    check_csrf()
     course = courses.get_course(course_id)
     if not course:
         return abort(404)
@@ -272,6 +279,7 @@ def all_courses():
 @app.route("/add_comment_entry/<int:entry_id>", methods=["POST"])
 def add_comment_entry(entry_id):
     require_login()
+    check_csrf()
     entry = entries.get_entry(entry_id)
     if not entry:
         return abort(404)
@@ -285,6 +293,7 @@ def add_comment_entry(entry_id):
 @app.route("/add_comment_course/<int:course_id>", methods=["POST"])
 def add_comment_course(course_id):
     require_login()
+    check_csrf()
     course = courses.get_course(course_id)
     if not course:
         return abort(404)
@@ -298,6 +307,7 @@ def add_comment_course(course_id):
 @app.route("/delete_comment/<int:comment_id>", methods=["POST"])
 def delete_comment(comment_id):
     require_login()
+    check_csrf()
     comment = comments.get_comment(comment_id)
     if not comment:
         return abort(404)
@@ -315,10 +325,12 @@ def delete_comment(comment_id):
 
 @app.route("/register")
 def register():
+    session["csrf_token"] = secrets.token_hex(16)
     return render_template("register.html")
 
 @app.route("/create", methods=["POST"])
 def create():
+    check_csrf()
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -342,8 +354,10 @@ def create():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
+        session["csrf_token"] = secrets.token_hex(16)
         return render_template("login.html")
     if request.method == "POST":
+        check_csrf()
         username = request.form["username"]
         password = request.form["password"]
 

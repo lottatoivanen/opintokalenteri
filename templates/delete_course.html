@@ -27,6 +27,7 @@
     <form class="form" action="/delete_course/{{ course.id }}" method="post">
         <p>Oletko varma, että haluat poistaa tämän kurssin?</p>
         <input type="hidden" name="course_id" value="{{ course.id }}"/>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" name="delete" value="Poista kurssi" class="btn btn--small"/>
         <input type="submit" name="cancel" value="Peruuta" class="btn btn--small"/>
     </form>

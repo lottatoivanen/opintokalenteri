@@ -14,8 +14,10 @@
     <p>
         Olet kirjautunut nimellä {{ session.username }}
     </p>
+    <br>
     <p>
-        <a href="/logout">Kirjaudu ulos</a>
+        <a class="btn btn--small" href="/logout">Kirjaudu ulos</a><br>
+        <a class="btn btn--small" href="/">Palaa etusivulle</a>
     </p>
     {% else %}
 
@@ -37,6 +39,7 @@
             Salasana: <br />
             <input type="password" name="password" required minlength="6" maxlength="100" />
         </p>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Kirjaudu" class="btn btn--small"/>
         <br>
         <p>Etkö ole vielä käyttäjä?</p>

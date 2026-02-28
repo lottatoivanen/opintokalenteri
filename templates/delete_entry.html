@@ -28,6 +28,7 @@
         <p>Oletko varma, että haluat poistaa tämän merkinnän?</p>
         <input type="hidden" name="entry_id" value="{{ entry.id }}"/>
         <input type="hidden" name="entry_tags" value="{{ entry_tags }}"/>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" name="delete" value="Poista merkintä" class="btn btn--small"/>
         <input type="submit" name="cancel" value="Peruuta" class="btn btn--small"/>
     </form>
