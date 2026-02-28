@@ -22,29 +22,35 @@
         <a class="btn btn--ghost" href="/logout">Kirjaudu ulos</a>
         </nav>
     </header>
-    <h3>Kurssit</h3>
-    <ul>
-        {% for course in all_courses %}
-            <li><a class="btn btn--link" href="/course/{{ course.id }}">{{ course.name }}</a></li>
-        {% else %}
-            <li>Ei kursseja.</li>
-        {% endfor %}
-    </ul>
-
-      <h2>Omat kalenterimerkinnät</h2>
-      <ul>
-        {% for entry in all_entries %}
-            <li>
-                <a class="btn btn--link" href="/entry/{{ entry.id }}">{{ entry.title }}</a><br>
-                Ajankohta: {{ entry.date }}<br>
-                {% if entry.course_name %}
-                    Kurssi: <a class="btn btn--link" href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
-                {% endif %}
-            </li>
-          {% else %}
-            <li>Ei merkintöjä.</li>
-          {% endfor %}
-      </ul>
+    <div class="dashboard-container">
+        <div class="courses-column">
+            <h2>Kurssit</h2>
+            <ul>
+                {% for course in all_courses %}
+                    <li><a class="btn--link" href="/course/{{ course.id }}">{{ course.name }}</a></li>
+                {% else %}
+                    <li>Ei kursseja.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="entries-column">
+              <h2>Omat kalenterimerkinnät</h2>
+              <ul>
+                {% for entry in all_entries %}
+                    <li>
+                        <b><a class="btn--link" href="/entry/{{ entry.id }}">{{ entry.title }}</a><br></b>
+                        Ajankohta: {{ entry.date }}
+                        {% if entry.course_name %}
+                            <br>
+                            Kurssi: <a class="btn--link" href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
+                        {% endif %}
+                    </li>
+                  {% else %}
+                    <li>Ei merkintöjä.</li>
+                  {% endfor %}
+              </ul>
+        </div>
+    </div>
 
     {% endif %}
 

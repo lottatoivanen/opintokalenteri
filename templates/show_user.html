@@ -29,9 +29,13 @@
     <br>
     <h3>Merkinnät</h3>
     <ul>
+        {% if entries %}
         {% for entry in entries %}
         <li><a href="/entry/{{ entry.id }}" class="btn btn--link">{{ entry.title }}</a></li>
         {% endfor %}
+        {% else %}
+        <li>Käyttäjällä ei ole merkintöjä.</li>
+        {% endif %}
     </ul>
     <br>
     <p><a href="/" class="btn btn--small">Takaisin etusivulle</a></p>
