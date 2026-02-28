@@ -34,6 +34,9 @@ Kun olet hakemiston sisällä, luo tietokanta ja taulut
 ```
 sqlite3 database.db < schema.sql
 ```
+```
+sqlite3 database.db < init.sql
+```
 
 Luo projektin juureen tiedosto config.py, ja lisää oma salainen avain
 
