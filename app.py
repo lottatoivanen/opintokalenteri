@@ -14,7 +14,9 @@ app = Flask(__name__)
 app.secret_key = config.secret_key
 
 def check_csrf():
-    if request.form["csrf_token"] != session["csrf_token"] or not request.form["csrf_token"] or not session["csrf_token"]:
+    token_form = request.form.get("csrf_token")
+    token_session = session.get("csrf_token")
+    if token_form != token_session or not token_form or not token_session:
         abort(403)
 
 def require_login():
@@ -66,6 +68,7 @@ def show_entry(entry_id):
     tags = entries.get_tags(entry_id)
     all_tags = entries.get_all_tags()
     entry_comments = comments.get_comments_entry(entry_id)
+    session["csrf_token"] = secrets.token_hex(16)
     return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]), tags=tags, all_tags=all_tags, comments=entry_comments)
 
 @app.route("/new_entry")
@@ -218,6 +221,7 @@ def show_course(course_id):
         return abort(404)
     course_entries = entries.get_entries_by_course(course_id)
     course_comments = comments.get_comments_course(course_id)
+    session["csrf_token"] = secrets.token_hex(16)
     return render_template("show_course.html", course=course, entries=course_entries, owner=(course["user_id"] == session["user_id"]), comments=course_comments)
 
 @app.route("/edit_course/<int:course_id>")
@@ -372,7 +376,6 @@ def login():
 
 @app.route("/logout")
 def logout():
-    if "user_id" in session:
-        del session["user_id"]
-        del session["username"]
+    check_csrf()
+    session.clear()
     return redirect("/")

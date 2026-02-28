@@ -37,7 +37,8 @@ CREATE TABLE tags (
 
 CREATE TABLE entry_tags (
     id INTEGER PRIMARY KEY,
-    FOREIGN KEY(entry_id) REFERENCES entries(id) ON DELETE CASCADE,
+    entry_id INTEGER,
     title TEXT,
-    value TEXT
+    value TEXT,
+    FOREIGN KEY(entry_id) REFERENCES entries(id) ON DELETE CASCADE
 );
