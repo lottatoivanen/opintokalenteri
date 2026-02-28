@@ -7,28 +7,37 @@
 <link rel="stylesheet" href="/static/main.css">
 
 <body class="center-page">
-  <header class="form-top-bar">
-    <h1 class="form-top-bar-title">Rekisteröinti</h1>
-  </header>
-  <form class="form-style" action="/create" method="post">
-    <p>
-      Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
-      Salasana: <br />
-      <input type="password" name="password1" />
-    </p>
-    <p>
-      Salasana uudestaan: <br />
-      <input type="password" name="password2" />
-    </p>
-    <input type="submit" value="Luo tunnus" class="btn btn--small"/>
-    <br>
-    <p>Oletko jo käyttäjä?</p>
-    <a href="/login" class="btn btn--small btn--ghost">Kirjaudu sisään</a>
-    <a href="/" class="btn btn--small btn--ghost">Palaa etusivulle</a>
-  </form>
+    <header class="form-top-bar">
+        <h1 class="form-top-bar-title">Rekisteröinti</h1>
+    </header>
+    <form class="form-style" action="/create" method="post">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-{{ category }}">
+                {% for category, message in messages %}
+                    <p class="flash-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+        <p>
+            Tunnus: <br />
+            <input type="text" name="username" required minlength="3" maxlength="20" />
+        </p>
+        <p>
+            Salasana: <br />
+            <input type="password" name="password1" required minlength="5" maxlength="100" />
+        </p>
+        <p>
+            Salasana uudestaan: <br />
+            <input type="password" name="password2" required minlength="5" maxlength="100" />
+        </p>
+        <input type="submit" value="Luo tunnus" class="btn btn--small"/>
+        <br>
+        <p>Oletko jo käyttäjä?</p>
+        <a href="/login" class="btn btn--small btn--ghost">Kirjaudu sisään</a>
+        <a href="/" class="btn btn--small btn--ghost">Palaa etusivulle</a>
+    </form>
 </body>
 
 </html>

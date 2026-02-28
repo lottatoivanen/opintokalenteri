@@ -18,14 +18,24 @@
         <a href="/logout">Kirjaudu ulos</a>
     </p>
     {% else %}
+
     <form class="form-style" action="/login" method="post">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-{{ category }}">
+                {% for category, message in messages %}
+                    <p class="flash-{{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
         <p>
             Tunnus: <br />
-            <input type="text" name="username" />
+            <input type="text" name="username" required minlength="3" maxlength="20" />
         </p>
         <p>
             Salasana: <br />
-            <input type="password" name="password" />
+            <input type="password" name="password" required minlength="6" maxlength="100" />
         </p>
         <input type="submit" value="Kirjaudu" class="btn btn--small"/>
         <br>

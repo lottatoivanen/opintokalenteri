@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, render_template, request, session, abort, flash
 import config
 import db
 import entries
@@ -11,6 +11,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
 
 def require_login():
     if "user_id" not in session:
@@ -319,11 +323,20 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("VIRHE: salasanat eivät ole samat", "error")
+        return redirect("/register")
+    elif len(username) < 3 or len(username) > 20:
+        flash("VIRHE: käyttäjätunnuksen tulee olla 3-20 merkkiä pitkä", "error")
+        return redirect("/register")
+    elif len(password1) < 6 or len(password1) > 100:
+        flash("VIRHE: salasanan tulee olla 6-100 merkkiä pitkä", "error")
+        return redirect("/register")
     try:
         user.create_user(username, password1)
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        flash("VIRHE: tunnus on jo varattu", "error")
+        return redirect("/register")
+    flash("Rekisteröityminen onnistui! Voit nyt kirjautua sisään.", "success")
     return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -340,7 +353,8 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: virheellinen tunnus tai salasana"
+            flash("VIRHE: virheellinen tunnus tai salasana", "error")
+            return redirect("/login")
 
 @app.route("/logout")
 def logout():

@@ -9,10 +9,11 @@
 :root {
     --bg-color:   #f9dbde;
     --text-green: #274e37;
-    --green-light:#739671;
+    --green-light:#76a074;
     --pink-mid:   #F6B0BB;
     --pink-light: #F1C8CB;
     --white:      #FFFFFF;
+    --red-light:  #f1a9a2;
 }
 
 * {
@@ -239,4 +240,26 @@ form {
     border: 1px solid var(--green-light);
     border-radius: 15px; 
     background-color: var(--white);
+}
+
+.flash-error {
+    background-color: var(--red-light);
+    color: var(--text-green);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: "Georgia", serif;
+}
+
+.flash-success {
+    background-color: var(--green-light);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: "Georgia", serif;
 }
