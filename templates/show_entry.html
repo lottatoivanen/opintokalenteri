@@ -76,7 +76,8 @@
         </p>
         <br>
         <p>
-            <button type="submit" class="btn btn--small">Lähetä kommentti</button>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="submit" value="Lähetä kommentti" class="btn btn--small"/>
         </p>
         <br>
     </form>

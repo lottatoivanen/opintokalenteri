@@ -62,6 +62,7 @@
             <p>
                 <textarea name="comment" rows="4" cols="50" maxlength="1000" required></textarea>
             </p>
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" value="Lähetä kommentti" class="btn btn--small"/>
         </form>
         <br>

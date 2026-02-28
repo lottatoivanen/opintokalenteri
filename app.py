@@ -67,8 +67,9 @@ def show_entry(entry_id):
         return abort(404)
     tags = entries.get_tags(entry_id)
     all_tags = entries.get_all_tags()
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
     entry_comments = comments.get_comments_entry(entry_id)
-    session["csrf_token"] = secrets.token_hex(16)
     return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]), tags=tags, all_tags=all_tags, comments=entry_comments)
 
 @app.route("/new_entry")
@@ -219,9 +220,10 @@ def show_course(course_id):
     course = courses.get_course(course_id)
     if not course:
         return abort(404)
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
     course_entries = entries.get_entries_by_course(course_id)
     course_comments = comments.get_comments_course(course_id)
-    session["csrf_token"] = secrets.token_hex(16)
     return render_template("show_course.html", course=course, entries=course_entries, owner=(course["user_id"] == session["user_id"]), comments=course_comments)
 
 @app.route("/edit_course/<int:course_id>")
@@ -376,6 +378,5 @@ def login():
 
 @app.route("/logout")
 def logout():
-    check_csrf()
     session.clear()
     return redirect("/")
