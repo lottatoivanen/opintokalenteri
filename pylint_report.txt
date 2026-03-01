@@ -1,0 +1,100 @@
+Pylint raportti
+
+************* Module app
+app.py:19:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:25:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:25:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
+app.py:30:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:45:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:61:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:85:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:104:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:116:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:158:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:176:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:176:0: R0911: Too many return statements (8/6) (too-many-return-statements)
+app.py:216:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:238:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:243:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:259:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:276:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:284:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:306:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:324:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:334:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:348:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:362:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:380:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:385:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:408:0: C0116: Missing function or method docstring (missing-function-docstring)
+app.py:408:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
+app.py:426:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module db
+db.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+db.py:15:0: C0116: Missing function or method docstring (missing-function-docstring)
+db.py:24:0: C0116: Missing function or method docstring (missing-function-docstring)
+db.py:27:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module user
+user.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+user.py:18:0: C0116: Missing function or method docstring (missing-function-docstring)
+user.py:32:0: C0116: Missing function or method docstring (missing-function-docstring)
+user.py:38:0: C0116: Missing function or method docstring (missing-function-docstring)
+user.py:51:0: C0116: Missing function or method docstring (missing-function-docstring)
+user.py:58:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module entries
+entries.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:9:0: R0913: Too many arguments (6/5) (too-many-arguments)
+entries.py:9:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+entries.py:22:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:34:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:42:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:62:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:78:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:78:0: R0913: Too many arguments (6/5) (too-many-arguments)
+entries.py:78:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+entries.py:95:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:105:0: C0116: Missing function or method docstring (missing-function-docstring)
+entries.py:120:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module courses
+courses.py:8:0: C0116: Missing function or method docstring (missing-function-docstring)
+courses.py:14:0: C0116: Missing function or method docstring (missing-function-docstring)
+courses.py:30:0: C0116: Missing function or method docstring (missing-function-docstring)
+courses.py:37:0: C0116: Missing function or method docstring (missing-function-docstring)
+courses.py:47:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module comments
+comments.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:15:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:21:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:35:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:49:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:67:0: C0116: Missing function or method docstring (missing-function-docstring)
+comments.py:1:0: R0801: Similar lines in 2 files
+==courses:[15:22]
+==user:[39:46]
+    SELECT courses.id,
+    courses.name,
+    courses.description,
+    courses.user_id,
+    users.username AS username
+    FROM courses
+    JOIN users ON users.id = courses.user_id (duplicate-code)
+
+------------------------------------------------------------------
+Your code has been rated at 8.65/10 (previous run: 8.65/10, +0.00)
+
+Korjaamattomat Pylint palautteet:
+
+C0116: Missing function or method docstring
+    - Sovelluksessa käytetyt funktiot ovat lyhyitä ja selkeitä, joten docstringien lisääminen ei toisi juurikaan lisäarvoa.
+
+R1710: Either all return statements in a function should return an expression, or none of them should
+    - Return-lauseiden muuttaminen vaatisi myös koodin hankaloittamista, ilman lisäarvoa.
+
+R0911: Too many return statements
+    - Useiden mahdollisten lopputulosten takia monta return-lausetta on tarpeellista.
+
+R0913: Too many (positional) arguments
+    - Parametrien määrä oli tarpeellinen funktion toimintaa varten. Niiden vähentäminen olisi tehnyt koodista paljon epäloogisempaa.
+
+R0801: Similar lines in 2 files
+    - SQL kyselyt ovat samanlaisia, mutta koodit palvelevat eri tarkoituksia.

@@ -1,5 +1,10 @@
-import db
+"""
+entries.py
+Functions for handling entries in the application.
+"""
+
 from flask import session
+import db
 
 def add_entry(title, description, date, user_id, course_id, tags):
     sql = """
@@ -11,8 +16,8 @@ def add_entry(title, description, date, user_id, course_id, tags):
     sql = """
     INSERT INTO entry_tags (entry_id, title, value) VALUES (?, ?, ?)
     """
-    for title, value in tags:
-        db.execute(sql, [entry_id, title, value])
+    for tag_title, value in tags:
+        db.execute(sql, [entry_id, tag_title, value])
 
 def get_all_tags():
     sql = """
@@ -28,7 +33,7 @@ def get_all_tags():
 
 def get_tags(entry_id):
     sql = """
-    SELECT title, value FROM entry_tags 
+    SELECT title, value FROM entry_tags
     WHERE entry_id = ?
     """
     rows = db.query(sql, [entry_id])
@@ -36,17 +41,17 @@ def get_tags(entry_id):
 
 def get_entry(entry_id):
     sql = """
-    SELECT entries.id, 
-    entries.title, 
-    entries.description, 
-    entries.date, 
-    entries.user_id, 
-    courses.id AS course_id, 
-    courses.name AS course_name, 
-    users.username AS username 
-    FROM entries 
-    JOIN users ON users.id = entries.user_id 
-    LEFT JOIN courses ON courses.id = entries.course_id 
+    SELECT entries.id,
+    entries.title,
+    entries.description,
+    entries.date,
+    entries.user_id,
+    courses.id AS course_id,
+    courses.name AS course_name,
+    users.username AS username
+    FROM entries
+    JOIN users ON users.id = entries.user_id
+    LEFT JOIN courses ON courses.id = entries.course_id
     WHERE entries.id = ?
     """
     result = db.query(sql, [entry_id])
@@ -56,36 +61,36 @@ def get_entry(entry_id):
 
 def get_entries_by_course(course_id):
     sql = """
-    SELECT entries.id, 
-    entries.title, 
-    entries.description, 
-    entries.date, 
-    entries.user_id, 
-    courses.id AS course_id, 
-    courses.name AS course_name 
-    FROM entries 
-    LEFT JOIN courses ON courses.id = entries.course_id 
-    WHERE entries.course_id = ? 
+    SELECT entries.id,
+    entries.title,
+    entries.description,
+    entries.date,
+    entries.user_id,
+    courses.id AS course_id,
+    courses.name AS course_name
+    FROM entries
+    LEFT JOIN courses ON courses.id = entries.course_id
+    WHERE entries.course_id = ?
     ORDER BY entries.date ASC
     """
     return db.query(sql, [course_id])
 
 def update_entry(entry_id, title, description, date, course_id, tags):
     sql = """
-    UPDATE entries SET title = ?, description = ?, date = ?, course_id = ? 
+    UPDATE entries SET title = ?, description = ?, date = ?, course_id = ?
     WHERE id = ?
     """
     db.execute(sql, [title, description, date, course_id, entry_id])
     sql = """
-    DELETE FROM entry_tags 
+    DELETE FROM entry_tags
     WHERE entry_id = ?
     """
     db.execute(sql, [entry_id])
     sql = """
     INSERT INTO entry_tags (entry_id, title, value) VALUES (?, ?, ?)
     """
-    for title, value in tags:
-        db.execute(sql, [entry_id, title, value])
+    for tag_title, value in tags:
+        db.execute(sql, [entry_id, tag_title, value])
 
 def delete_entry(entry_id):
     sql = """
@@ -99,31 +104,32 @@ def delete_entry(entry_id):
 
 def find_entry_user(query):
     sql = """
-    SELECT DISTINCT entries.id, 
-    entries.title, entries.date, 
-    entry_tags.title, 
-    courses.name AS course_name 
-    FROM entries 
-    LEFT JOIN courses ON courses.id = entries.course_id 
-    LEFT JOIN entry_tags ON entry_tags.entry_id = entries.id 
-    WHERE (entries.title LIKE ? OR entries.description LIKE ? OR entry_tags.value LIKE ?) AND entries.user_id = ? 
+    SELECT DISTINCT entries.id,
+    entries.title, entries.date,
+    entry_tags.title,
+    courses.name AS course_name
+    FROM entries
+    LEFT JOIN courses ON courses.id = entries.course_id
+    LEFT JOIN entry_tags ON entry_tags.entry_id = entries.id
+    WHERE (entries.title LIKE ? OR entries.description LIKE ? OR entry_tags.value LIKE ?) AND entries.user_id = ?
     ORDER BY entries.date ASC
     """
     pattern = "%" + query + "%"
     return db.query(sql, [pattern, pattern, pattern, session["user_id"]])
 
 def find_entry_other_users(query):
-    sql = """SELECT DISTINCT entries.id, 
-    entries.title, 
-    entries.date, 
-    users.username, 
-    entry_tags.title, 
-    courses.name AS course_name 
-    FROM entries 
-    JOIN users ON users.id = entries.user_id 
-    LEFT JOIN courses ON courses.id = entries.course_id 
-    LEFT JOIN entry_tags ON entry_tags.entry_id = entries.id 
-    WHERE (entries.title LIKE ? OR entries.description LIKE ? OR entry_tags.value LIKE ?) AND entries.user_id != ? 
+    sql = """
+    SELECT DISTINCT entries.id,
+    entries.title,
+    entries.date,
+    users.username,
+    entry_tags.title,
+    courses.name AS course_name
+    FROM entries
+    JOIN users ON users.id = entries.user_id
+    LEFT JOIN courses ON courses.id = entries.course_id
+    LEFT JOIN entry_tags ON entry_tags.entry_id = entries.id
+    WHERE (entries.title LIKE ? OR entries.description LIKE ? OR entry_tags.value LIKE ?) AND entries.user_id != ?
     ORDER BY users.username, entries.date ASC
     """
     pattern = "%" + query + "%"

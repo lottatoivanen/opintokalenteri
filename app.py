@@ -1,14 +1,17 @@
+"""
+app.py
+Main application file for the Opintokalenteri web application.
+"""
+
 import sqlite3
-from flask import Flask
-from flask import redirect, render_template, request, session, abort, flash
+from datetime import datetime
+import secrets
+from flask import Flask, redirect, render_template, request, session, abort, flash
 import config
-import db
 import entries
 import user
 import courses
 import comments
-from datetime import datetime
-import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -32,8 +35,8 @@ def index():
     all_tags = entries.get_all_tags()
     return render_template(
         "index.html", 
-        all_entries=all_entries, 
-        all_courses=all_courses, 
+        all_entries=all_entries,
+        all_courses=all_courses,
         all_tags=all_tags)
 
 ### entries ###
@@ -49,10 +52,10 @@ def user_entries(username):
     all_tags = entries.get_all_tags()
     return render_template(
         "show_user.html", 
-        user=u, 
-        entries=e, 
-        courses=c, 
-        all_tags=all_tags)    
+        user=u,
+        entries=e,
+        courses=c,
+        all_tags=all_tags)
 
 @app.route("/find_entry")
 def find_entry():
@@ -66,13 +69,16 @@ def find_entry():
         results = []
         other_results = []
     all_tags = entries.get_all_tags()
-    all_courses = user.get_courses_by_user(session["user_id"]) + user.get_all_courses_except_user(session["user_id"])
+    all_courses = (
+        user.get_courses_by_user(session["user_id"])
+        + user.get_all_courses_except_user(session["user_id"])
+    )
     return render_template(
         "find_entry.html", 
-        query=query, 
-        results=results, 
-        other_results=other_results, 
-        all_tags=all_tags, 
+        query=query,
+        results=results,
+        other_results=other_results,
+        all_tags=all_tags,
         all_courses=all_courses)
 
 @app.route("/entry/<int:entry_id>")
@@ -88,10 +94,10 @@ def show_entry(entry_id):
     entry_comments = comments.get_comments_entry(entry_id)
     return render_template(
         "show_entry.html", 
-        entry=entry, 
-        owner=(entry["user_id"] == session["user_id"]), 
-        tags=tags, 
-        all_tags=all_tags, 
+        entry=entry,
+        owner=(entry["user_id"] == session["user_id"]),
+        tags=tags,
+        all_tags=all_tags,
         comments=entry_comments)
 
 @app.route("/new_entry")
@@ -101,9 +107,9 @@ def new_entry():
     all_courses = user.get_courses_by_user(session["user_id"])
     all_tags = entries.get_all_tags()
     return render_template(
-        "new_entry.html", 
-        all_courses=all_courses, 
-        selected_course_id=course_id, 
+        "new_entry.html",
+        all_courses=all_courses,
+        selected_course_id=course_id,
         all_tags=all_tags)
 
 @app.route("/create_entry", methods=["GET", "POST"])
@@ -115,9 +121,9 @@ def create_entry():
         all_courses = user.get_courses_by_user(session["user_id"])
         all_tags = entries.get_all_tags()
         return render_template(
-            "new_entry.html", 
-            all_courses=all_courses, 
-            selected_course_id=course_id, 
+            "new_entry.html",
+            all_courses=all_courses,
+            selected_course_id=course_id,
             all_tags=all_tags)
     title = request.form["title"]
     if not title or len(title) > 50:
@@ -161,9 +167,9 @@ def edit_entry(entry_id):
     all_courses = user.get_courses_by_user(session["user_id"])
     return render_template(
         "edit_entry.html", 
-        entry=entry, 
-        all_courses=all_courses, 
-        all_tags=all_tags, 
+        entry=entry,
+        all_courses=all_courses,
+        all_tags=all_tags,
         entry_tags=entry_tags)
 
 @app.route("/edit_entry/<int:entry_id>", methods=["POST"])
@@ -176,7 +182,6 @@ def update_entry(entry_id):
         return abort(404)
     if entry["user_id"] != session["user_id"]:
         return abort(403)
-
     title = request.form["title"]
     if not title or len(title) > 50:
         return abort(403)
@@ -205,8 +210,7 @@ def update_entry(entry_id):
     if "update" in request.form:
         entries.update_entry(entry_id, title, description, date, course_id, tags)
         return redirect("/entry/" + str(entry_id))
-    else:
-        return redirect("/entry/" + str(entry_id))
+    return redirect("/entry/" + str(entry_id))
 
 @app.route("/delete_entry/<int:entry_id>", methods=["GET", "POST"])
 def delete_entry(entry_id):
@@ -219,15 +223,14 @@ def delete_entry(entry_id):
         return abort(403)
     if request.method == "GET":
         return render_template(
-            "delete_entry.html", 
-            entry=entry, 
+            "delete_entry.html",
+            entry=entry,
             entry_tags=entry_tags)
-    else:
-        check_csrf()
-        if "delete" in request.form:
-            entries.delete_entry(entry_id)
-            return redirect("/")
-        return redirect("/entry/" + str(entry_id))
+    check_csrf()
+    if "delete" in request.form:
+        entries.delete_entry(entry_id)
+        return redirect("/")
+    return redirect("/entry/" + str(entry_id))
 
 ### courses ###
 
@@ -264,9 +267,9 @@ def show_course(course_id):
     course_comments = comments.get_comments_course(course_id)
     return render_template(
         "show_course.html", 
-        course=course, 
-        entries=course_entries, 
-        owner=(course["user_id"] == session["user_id"]), 
+        course=course,
+        entries=course_entries,
+        owner=(course["user_id"] == session["user_id"]),
         comments=course_comments)
 
 @app.route("/edit_course/<int:course_id>")
@@ -293,12 +296,11 @@ def update_course(course_id):
         return abort(403)
     description = request.form["description"]
     if len(description) > 1000:
-        return abort(403) 
+        return abort(403)
     if "update" in request.form:
         courses.update_course(course_id, name, description)
         return redirect("/course/" + str(course_id))
-    else:
-        return redirect("/course/" + str(course_id))
+    return redirect("/course/" + str(course_id))
 
 @app.route("/delete_course/<int:course_id>", methods=["GET", "POST"])
 def delete_course(course_id):
@@ -310,21 +312,20 @@ def delete_course(course_id):
         return abort(403)
     if request.method == "GET":
         return render_template(
-            "delete_course.html", 
+            "delete_course.html",
             course=course)
-    else:
-        check_csrf()
-        if "delete" in request.form:
-            courses.delete_course(course_id)
-            return redirect("/")
-        return redirect("/course/" + str(course_id))
+    check_csrf()
+    if "delete" in request.form:
+        courses.delete_course(course_id)
+        return redirect("/")
+    return redirect("/course/" + str(course_id))
 
 @app.route("/all_courses")
-def all_courses():
+def show_all_courses():
     require_login()
     all_courses = user.get_all_courses_except_user(session["user_id"])
     return render_template(
-        "all_courses.html", 
+        "show_all_courses.html",
         all_courses=all_courses)
 
 ### comments ###
@@ -370,9 +371,8 @@ def delete_comment(comment_id):
     comments.delete_comment(comment_id)
     if comment["entry_id"]:
         return redirect("/entry/" + str(entry_id))
-    else:
-        course_id = comment["course_id"]
-        return redirect("/course/" + str(course_id))
+    course_id = comment["course_id"]
+    return redirect("/course/" + str(course_id))
 
 ### sign up, login, logout ###
 
@@ -390,10 +390,10 @@ def create():
     if password1 != password2:
         flash("VIRHE: salasanat eivät ole samat", "error")
         return redirect("/register")
-    elif len(username) < 3 or len(username) > 20:
+    if len(username) < 3 or len(username) > 20:
         flash("VIRHE: käyttäjätunnuksen tulee olla 3-20 merkkiä pitkä", "error")
         return redirect("/register")
-    elif len(password1) < 6 or len(password1) > 100:
+    if len(password1) < 6 or len(password1) > 100:
         flash("VIRHE: salasanan tulee olla 6-100 merkkiä pitkä", "error")
         return redirect("/register")
     try:
@@ -419,9 +419,8 @@ def login():
             session["user_id"] = user_id
             session["username"] = username
             return redirect("/")
-        else:
-            flash("VIRHE: virheellinen tunnus tai salasana", "error")
-            return redirect("/login")
+        flash("VIRHE: virheellinen tunnus tai salasana", "error")
+        return redirect("/login")
 
 @app.route("/logout")
 def logout():

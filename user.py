@@ -1,3 +1,8 @@
+"""
+user.py
+Functions for handling user information in the application.
+"""
+
 from werkzeug.security import check_password_hash, generate_password_hash
 import db
 
@@ -12,14 +17,14 @@ def get_user_by_username(username):
 
 def get_entries_by_user(user_id):
     sql = """
-    SELECT entries.id, 
-    entries.title, 
-    entries.date, 
-    courses.id AS course_id, 
-    courses.name AS course_name 
-    FROM entries 
-    LEFT JOIN courses ON courses.id = entries.course_id 
-    WHERE entries.user_id = ? 
+    SELECT entries.id,
+    entries.title,
+    entries.date,
+    courses.id AS course_id,
+    courses.name AS course_name
+    FROM entries
+    LEFT JOIN courses ON courses.id = entries.course_id
+    WHERE entries.user_id = ?
     ORDER BY date ASC
     """
     return db.query(sql, [user_id])
@@ -32,13 +37,13 @@ def get_courses_by_user(user_id):
 
 def get_all_courses_except_user(user_id):
     sql = """
-    SELECT courses.id, 
-    courses.name, 
-    courses.description, 
-    courses.user_id, 
-    users.username AS username 
-    FROM courses 
-    JOIN users ON users.id = courses.user_id 
+    SELECT courses.id,
+    courses.name,
+    courses.description,
+    courses.user_id,
+    users.username AS username
+    FROM courses
+    JOIN users ON users.id = courses.user_id
     WHERE courses.user_id != ?
     """
     return db.query(sql, [user_id])

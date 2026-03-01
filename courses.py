@@ -1,3 +1,8 @@
+"""
+courses.py
+Functions for handling courses in the application.
+"""
+
 import db
 
 def add_course(name, description, user_id):
@@ -8,13 +13,13 @@ def add_course(name, description, user_id):
 
 def get_course(course_id):
     sql = """
-    SELECT courses.id, 
-    courses.name, 
-    courses.description, 
-    courses.user_id, 
-    users.username AS username 
-    FROM courses 
-    JOIN users ON users.id = courses.user_id 
+    SELECT courses.id,
+    courses.name,
+    courses.description,
+    courses.user_id,
+    users.username AS username
+    FROM courses
+    JOIN users ON users.id = courses.user_id
     WHERE courses.id = ?
     """
     result = db.query(sql, [course_id])
@@ -24,7 +29,7 @@ def get_course(course_id):
 
 def update_course(course_id, name, description):
     sql = """
-    UPDATE courses SET name = ?, description = ? 
+    UPDATE courses SET name = ?, description = ?
     WHERE id = ?
     """
     db.execute(sql, [name, description, course_id])

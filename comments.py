@@ -1,5 +1,10 @@
-import db
+"""
+comments.py
+Functions for handling comments on courses and entries.
+"""
+
 import datetime
+import db
 
 def add_comment_entry(entry_id, user_id, comment):
     sql = """
