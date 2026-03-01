@@ -80,4 +80,4 @@ Koodin palautteeseen käytettiin Pylint työkalua, joka suoritettiin tiedostoihi
 
 Pylint antoi koodille arvosanaksi 8.65/10. Korjaamattomat palautteet jätettiin loogisuuden ja koodin helppouden takia.
 
-Lisätietoja raporttiin liittyen löytyy tiedostosta pylint-report.txt.
+Lisätietoja raporttiin liittyen löytyy tiedostosta pylint_report.txt.
