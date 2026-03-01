@@ -74,6 +74,17 @@ Käynnistä sovellus komennolla
 flask run
 ```
 
+## Suuren data määrän testaaminen
+
+Testasin suuren tietokannan toimivuutta sovelluksen kanssa test_db.py tiedoston avulla. Testitiedosto lisää sovellukseen automaattisesti 200 uutta kurssia sekä kalenterimerkintää. 
+
+Asensin testidatan sovellukseen komennolla
+```
+python3 test_db.py
+```
+Sovellus toimi suuren testidatan kanssa, mutta ilman sivutusta sovelluksen sivut venyivät todella pitkiksi. Testidata renderöitiin siis kaikki kerralla, joten sivujen latautumisesta tuli hitaampaa.
+Sivutuksen avulla tämä ongelma olisi ratkennut, sillä data olisi jaettu pienempiin osiin.
+
 ## Pylint raportti
 
 Koodin palautteeseen käytettiin Pylint työkalua, joka suoritettiin tiedostoihin app.py, db.py, comments.py, user.py, entries.py ja courses.py.
