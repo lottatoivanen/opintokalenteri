@@ -1,18 +1,24 @@
 # Opiskelukalenteri
 
-*Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
+Tämä sovellus on web pohjainen kalenterisovellus, jossa käyttäjä pystyy helpommin hallita omien opintojen aikataulutusta.
 
-*Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan kalenterimerkintöjä.
+## Sovelluksen ominaisuudet
 
-*Käyttäjä näkee sovellukseen lisätyt kalenterimerkinnät.
+* Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 
-*Käyttäjä pystyy etsimään kalenterimerkintöjä hakusanalla tai muulla perusteella.
+* Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan kalenterimerkintöjä.
 
-*Käyttäjäsivu näyttää tilastoja ja käyttäjän lisäämät kalenterimerkinnät.
+* Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan kursseja.
 
-*Käyttäjä pystyy valitsemaan kalenterimerkinnälle yhden tai useamman luokittelun.
+* Käyttäjä näkee sovellukseen lisätyt kalenterimerkinnät sekä kurssit.
 
-*Käyttäjä pystyy lisäämään kalenterimerkintään toissijaisia merkintöjä.
+* Käyttäjä pystyy etsimään kalenterimerkintöjä hakusanalla.
+
+* Käyttäjä näkee käyttäjäsivuilta lisätyt kalenterimerkinnät sekä tilastoja.
+
+* Käyttäjä pystyy valitsemaan kalenterimerkinnälle yhden tai useamman luokittelun (esim. "tentti" tai "harjoitustyö").
+
+* Käyttäjä pystyy lisäämään kalenterimerkintään toissijaisia merkintöjä (esim. merkinnän ajankohdan tai siihen liittyvän kurssin).
 
 
 ## Asennus- ja käyttöohjeet
