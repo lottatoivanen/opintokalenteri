@@ -57,7 +57,8 @@ def find_entry():
         results = []
         other_results = []
     all_tags = entries.get_all_tags()
-    return render_template("find_entry.html", query=query, results=results, other_results=other_results, all_tags=all_tags)
+    all_courses = user.get_courses_by_user(session["user_id"]) and user.get_all_courses_except_user(session["user_id"])
+    return render_template("find_entry.html", query=query, results=results, other_results=other_results, all_tags=all_tags, all_courses=all_courses)
 
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
@@ -176,7 +177,6 @@ def update_entry(entry_id):
 @app.route("/delete_entry/<int:entry_id>", methods=["GET", "POST"])
 def delete_entry(entry_id):
     require_login()
-    check_csrf()
     entry = entries.get_entry(entry_id)
     entry_tags = entries.get_tags(entry_id)
     if not entry:
@@ -185,10 +185,11 @@ def delete_entry(entry_id):
         return abort(403)
     if request.method == "GET":
         return render_template("delete_entry.html", entry=entry, entry_tags=entry_tags)
-    if "delete" in request.form:
-        entries.delete_entry(entry_id)
-        return redirect("/")
     else:
+        check_csrf()
+        if "delete" in request.form:
+            entries.delete_entry(entry_id)
+            return redirect("/")
         return redirect("/entry/" + str(entry_id))
 
 ### courses ###
@@ -260,7 +261,6 @@ def update_course(course_id):
 @app.route("/delete_course/<int:course_id>", methods=["GET", "POST"])
 def delete_course(course_id):
     require_login()
-    check_csrf()
     course = courses.get_course(course_id)
     if not course:
         return abort(404)
@@ -268,10 +268,11 @@ def delete_course(course_id):
         return abort(403)
     if request.method == "GET":
         return render_template("delete_course.html", course=course)
-    if "delete" in request.form:
-        courses.delete_course(course_id)
-        return redirect("/")
     else:
+        check_csrf()
+        if "delete" in request.form:
+            courses.delete_course(course_id)
+            return redirect("/")
         return redirect("/course/" + str(course_id))
 
 @app.route("/all_courses")

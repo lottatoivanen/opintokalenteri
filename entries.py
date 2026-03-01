@@ -52,11 +52,11 @@ def delete_entry(entry_id):
     db.execute(sql, [entry_id])
 
 def find_entry_user(query):
-    sql = """SELECT entries.id, entries.title, entries.date FROM entries WHERE (entries.title LIKE ? OR entries.description LIKE ?) AND entries.user_id = ? ORDER BY date ASC"""
+    sql = """SELECT DISTINCT entries.id, entries.title, entries.date, entry_tags.title, courses.name AS course_name FROM entries LEFT JOIN courses ON courses.id = entries.course_id LEFT JOIN entry_tags ON entry_tags.entry_id = entries.id WHERE (entries.title LIKE ? OR entries.description LIKE ? OR entry_tags.value LIKE ?) AND entries.user_id = ? ORDER BY entries.date ASC"""
     pattern = "%" + query + "%"
-    return db.query(sql, [pattern, pattern, session["user_id"]])
+    return db.query(sql, [pattern, pattern, pattern, session["user_id"]])
 
 def find_entry_other_users(query):
-    sql = """SELECT entries.id, entries.title, entries.date, users.username FROM entries JOIN users ON users.id = entries.user_id WHERE (entries.title LIKE ? OR entries.description LIKE ?) AND entries.user_id != ? ORDER BY date ASC"""
+    sql = """SELECT DISTINCT entries.id, entries.title, entries.date, users.username, entry_tags.title, courses.name AS course_name FROM entries JOIN users ON users.id = entries.user_id LEFT JOIN courses ON courses.id = entries.course_id LEFT JOIN entry_tags ON entry_tags.entry_id = entries.id WHERE (entries.title LIKE ? OR entries.description LIKE ? OR entry_tags.value LIKE ?) AND entries.user_id != ? ORDER BY users.username, entries.date ASC"""
     pattern = "%" + query + "%"
-    return db.query(sql, [pattern, pattern, session["user_id"]])
+    return db.query(sql, [pattern, pattern, pattern, session["user_id"]])
