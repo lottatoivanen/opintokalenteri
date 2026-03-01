@@ -73,3 +73,11 @@ Käynnistä sovellus komennolla
 ```
 flask run
 ```
+
+## Pylint raportti
+
+Koodin palautteeseen käytettiin Pylint työkalua, joka suoritettiin tiedostoihin app.py, db.py, comments.py, user.py, entries.py ja courses.py.
+
+Pylint antoi koodille arvosanaksi 8.65/10. Korjaamattomat palautteet jätettiin loogisuuden ja koodin helppouden takia.
+
+Lisätietoja raporttiin liittyen löytyy tiedostosta pylint-report.txt.
