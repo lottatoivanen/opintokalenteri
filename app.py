@@ -30,7 +30,11 @@ def index():
     all_entries = user.get_entries_by_user(session["user_id"])
     all_courses = user.get_courses_by_user(session["user_id"])
     all_tags = entries.get_all_tags()
-    return render_template("index.html", all_entries=all_entries, all_courses=all_courses, all_tags=all_tags)
+    return render_template(
+        "index.html", 
+        all_entries=all_entries, 
+        all_courses=all_courses, 
+        all_tags=all_tags)
 
 ### entries ###
 
@@ -43,7 +47,12 @@ def user_entries(username):
     e = user.get_entries_by_user(u["id"])
     c = user.get_courses_by_user(u["id"])
     all_tags = entries.get_all_tags()
-    return render_template("show_user.html", user=u, entries=e, courses=c, all_tags=all_tags)    
+    return render_template(
+        "show_user.html", 
+        user=u, 
+        entries=e, 
+        courses=c, 
+        all_tags=all_tags)    
 
 @app.route("/find_entry")
 def find_entry():
@@ -57,8 +66,14 @@ def find_entry():
         results = []
         other_results = []
     all_tags = entries.get_all_tags()
-    all_courses = user.get_courses_by_user(session["user_id"]) and user.get_all_courses_except_user(session["user_id"])
-    return render_template("find_entry.html", query=query, results=results, other_results=other_results, all_tags=all_tags, all_courses=all_courses)
+    all_courses = user.get_courses_by_user(session["user_id"]) + user.get_all_courses_except_user(session["user_id"])
+    return render_template(
+        "find_entry.html", 
+        query=query, 
+        results=results, 
+        other_results=other_results, 
+        all_tags=all_tags, 
+        all_courses=all_courses)
 
 @app.route("/entry/<int:entry_id>")
 def show_entry(entry_id):
@@ -71,7 +86,13 @@ def show_entry(entry_id):
     if "csrf_token" not in session:
         session["csrf_token"] = secrets.token_hex(16)
     entry_comments = comments.get_comments_entry(entry_id)
-    return render_template("show_entry.html", entry=entry, owner=(entry["user_id"] == session["user_id"]), tags=tags, all_tags=all_tags, comments=entry_comments)
+    return render_template(
+        "show_entry.html", 
+        entry=entry, 
+        owner=(entry["user_id"] == session["user_id"]), 
+        tags=tags, 
+        all_tags=all_tags, 
+        comments=entry_comments)
 
 @app.route("/new_entry")
 def new_entry():
@@ -79,7 +100,11 @@ def new_entry():
     course_id = request.args.get("course_id")
     all_courses = user.get_courses_by_user(session["user_id"])
     all_tags = entries.get_all_tags()
-    return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id, all_tags=all_tags)
+    return render_template(
+        "new_entry.html", 
+        all_courses=all_courses, 
+        selected_course_id=course_id, 
+        all_tags=all_tags)
 
 @app.route("/create_entry", methods=["GET", "POST"])
 def create_entry():
@@ -89,7 +114,11 @@ def create_entry():
         course_id = request.args.get("course_id")
         all_courses = user.get_courses_by_user(session["user_id"])
         all_tags = entries.get_all_tags()
-        return render_template("new_entry.html", all_courses=all_courses, selected_course_id=course_id, all_tags=all_tags)
+        return render_template(
+            "new_entry.html", 
+            all_courses=all_courses, 
+            selected_course_id=course_id, 
+            all_tags=all_tags)
     title = request.form["title"]
     if not title or len(title) > 50:
         return abort(403)
@@ -130,7 +159,12 @@ def edit_entry(entry_id):
     all_tags = entries.get_all_tags()
     entry_tags = entries.get_tags(entry_id)
     all_courses = user.get_courses_by_user(session["user_id"])
-    return render_template("edit_entry.html", entry=entry, all_courses=all_courses, all_tags=all_tags, entry_tags=entry_tags)
+    return render_template(
+        "edit_entry.html", 
+        entry=entry, 
+        all_courses=all_courses, 
+        all_tags=all_tags, 
+        entry_tags=entry_tags)
 
 @app.route("/edit_entry/<int:entry_id>", methods=["POST"])
 def update_entry(entry_id):
@@ -184,7 +218,10 @@ def delete_entry(entry_id):
     if entry["user_id"] != session["user_id"]:
         return abort(403)
     if request.method == "GET":
-        return render_template("delete_entry.html", entry=entry, entry_tags=entry_tags)
+        return render_template(
+            "delete_entry.html", 
+            entry=entry, 
+            entry_tags=entry_tags)
     else:
         check_csrf()
         if "delete" in request.form:
@@ -225,7 +262,12 @@ def show_course(course_id):
         session["csrf_token"] = secrets.token_hex(16)
     course_entries = entries.get_entries_by_course(course_id)
     course_comments = comments.get_comments_course(course_id)
-    return render_template("show_course.html", course=course, entries=course_entries, owner=(course["user_id"] == session["user_id"]), comments=course_comments)
+    return render_template(
+        "show_course.html", 
+        course=course, 
+        entries=course_entries, 
+        owner=(course["user_id"] == session["user_id"]), 
+        comments=course_comments)
 
 @app.route("/edit_course/<int:course_id>")
 def edit_course(course_id):
@@ -267,7 +309,9 @@ def delete_course(course_id):
     if course["user_id"] != session["user_id"]:
         return abort(403)
     if request.method == "GET":
-        return render_template("delete_course.html", course=course)
+        return render_template(
+            "delete_course.html", 
+            course=course)
     else:
         check_csrf()
         if "delete" in request.form:
@@ -279,7 +323,9 @@ def delete_course(course_id):
 def all_courses():
     require_login()
     all_courses = user.get_all_courses_except_user(session["user_id"])
-    return render_template("all_courses.html", all_courses=all_courses)
+    return render_template(
+        "all_courses.html", 
+        all_courses=all_courses)
 
 ### comments ###
 

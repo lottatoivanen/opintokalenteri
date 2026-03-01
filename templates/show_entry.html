@@ -28,7 +28,7 @@
 
     <p>
         <b>Kuvaus:</b> <br />
-        {{ entry.description }}
+        <div class="description">{{ entry.description }}</div>
     </p>
     <br>
     <p>
@@ -36,13 +36,13 @@
     </p>
     <br>
     <p>
-        <b>Lisännyt käyttäjä:</b> <a href="/user/{{ entry.username }}">{{ entry.username }}</a>
+        <b>Lisännyt käyttäjä:</b> <a class="btn--link" href="/user/{{ entry.username }}">{{ entry.username }}</a>
     </p>
     <br>
     <p>
         <b>Kurssi:</b>
         {% if entry.course_name %}
-            <a href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
+            <a class="btn--link" href="/course/{{ entry.course_id }}">{{ entry.course_name }}</a>
         {% else %}
             Ei kurssia
         {% endif %}
@@ -60,8 +60,10 @@
     </p>
     <br>
         {% if owner %}
-        <a href="/edit_entry/{{ entry.id }}" class="btn btn--small">Muokkaa merkintää</a>
-        <a href="/delete_entry/{{ entry.id }}" class="btn btn--small">Poista merkintä</a>
+        <nav class="top-bar-actions">
+            <a href="/edit_entry/{{ entry.id }}" class="btn btn--small">Muokkaa merkintää</a>
+            <a href="/delete_entry/{{ entry.id }}" class="btn btn--small">Poista merkintä</a>
+        </nav>
         {% endif %}
 
     <br>
@@ -87,7 +89,7 @@
             <ul>
             {% for comment in comments %}
                 <div class="comment">
-                    <div class="author"><a href="/user/{{ comment.username }}">{{ comment.username }}</a></div>
+                    <a class="author" href="/user/{{ comment.username }}">{{ comment.username }}</a>
                     <div class="date">{{ comment.date }}</div>
                     <div class="content">{{ comment.comment }}</div>
                     {% if session.user_id == comment.user_id %}

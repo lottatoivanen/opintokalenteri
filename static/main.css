@@ -213,22 +213,23 @@ form {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     width: 500px;
     max-width: 100%;
+    color: var(--text-green);
+    font-family: "Georgia", serif;
 }
 
 .comment .author {
-    font-weight: bold;
     color: var(--text-green);
-    margin-bottom: 5px;
+    font-family: "Georgia", serif;
+    font-weight: bold;
+    font-size: 1rem;
 }
 
 .comment .date {
     font-size: 0.85rem;
-    color: var(--text-green-light);
 }
 
 .comment .content {
     margin-top: 10px;
-    color: var(--text-green);
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -237,8 +238,6 @@ form {
 .comment-box {
     padding: 20px;
     font-size: 1rem;
-    font-family: "Georgia", serif;
-    color: var(--text-green);
     border: 1px solid var(--green-light);
     border-radius: 15px; 
     background-color: var(--white);
@@ -279,4 +278,16 @@ form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.description {
+    font-size: 1.2rem;
+    color: var(--text-green);
+    margin-top: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    width: 450px;
+    border: 1px solid var(--text-green);
+    border-radius: 8px;
+    padding: 10px;
 }

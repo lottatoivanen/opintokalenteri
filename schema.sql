@@ -10,7 +10,8 @@ CREATE TABLE entries (
     description TEXT,
     date DATE,
     user_id INTEGER REFERENCES users,
-    course_id INTEGER REFERENCES courses 
+    course_id INTEGER,
+    FOREIGN KEY(course_id) REFERENCES courses ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
@@ -18,8 +19,10 @@ CREATE TABLE comments (
     comment TEXT,
     date DATE,
     user_id INTEGER REFERENCES users,
-    entry_id INTEGER REFERENCES entries ON DELETE CASCADE,
-    course_id INTEGER REFERENCES courses ON DELETE CASCADE
+    entry_id INTEGER,
+    course_id INTEGER,
+    FOREIGN KEY(course_id) REFERENCES courses ON DELETE CASCADE,
+    FOREIGN KEY(entry_id) REFERENCES entries(id) ON DELETE CASCADE
 );
 
 CREATE TABLE courses (

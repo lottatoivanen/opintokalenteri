@@ -43,7 +43,9 @@
       <select name="course_id">
         <option value="">Ei kurssia</option>
         {% for course in all_courses %}
-          <option value="{{ course.id }}" {% if entry.course_id == course.id %}selected{% endif %}>{{ course.name }}</option>
+          <option value="{{ course.id }}" {% if entry.course_id == course.id %}selected{% endif %}>
+            {{ course.name }}
+          </option>
         {% endfor %}
       </select>
     </p>
@@ -52,7 +54,12 @@
     <p>
       {{ tag }}: <br />
       {% for value in all_tags[tag] %}
-        <input type="checkbox" name="tags" value="{{ tag }}:{{ value }}" {% if (tag, value) in entry_tags %}checked{% endif %}> {{ value }}<br />
+        <input
+            type="checkbox" 
+            name="tags" 
+            value="{{ tag }}:{{ value }}" 
+            {% if (tag, value) in entry_tags %}checked{% endif %}>
+        {{ value }}<br />
       {% endfor %}
     </p>
     {% endfor %}

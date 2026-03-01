@@ -27,18 +27,18 @@
     </header>
     <p>
         <b>Kuvaus:</b> <br />
-        {{ course.description }}
+        <div class="description">{{ course.description }}</div>
     </p>
     <br>
     <p>
-        <b>Lisännyt käyttäjä:</b> <a href="/user/{{ course.username }}">{{ course.username }}</a>
+        <b>Lisännyt käyttäjä:</b> <a class="btn--link" href="/user/{{ course.username }}">{{ course.username }}</a>
     </p>
     <br>
         {% if owner %}
         <nav class="top-bar-actions">
-            <a href="/edit_course/{{ course.id }}" class="btn btn--small">Muokkaa kurssia</a>
-            <a href="/delete_course/{{ course.id }}" class="btn btn--small">Poista kurssi</a>
-            <a href="/new_entry?course_id={{ course.id }}" class="btn btn--small">Lisää merkintä </a>
+            <a class="btn btn--small" href="/edit_course/{{ course.id }}">Muokkaa kurssia</a>
+            <a class="btn btn--small" href="/delete_course/{{ course.id }}">Poista kurssi</a>
+            <a class="btn btn--small" href="/new_entry?course_id={{ course.id }}">Lisää merkintä </a>
         </nav>
         {% endif %}
     <br>
@@ -47,11 +47,12 @@
             {% if entries %}
                 <ul>
                 {% for entry in entries %}
-                    <li><a href="/entry/{{ entry.id }}" class="btn btn--link">{{ entry.title }}</a></li>
+                    <li><a class="btn btn--link" href="/entry/{{ entry.id }}">{{ entry.title }}</a></li>
                 {% endfor %}
                 </ul>
             {% else %}
                 Ei merkintöjä.
+                <br>
             {% endif %}
     <br>
     <div class="comment-box">
@@ -71,7 +72,7 @@
             <ul>
             {% for comment in comments %}
                 <div class="comment">
-                    <div class="author"><a href="/user/{{ comment.username }}">{{ comment.username }}</a></div>
+                    <a class="author" href="/user/{{ comment.username }}">{{ comment.username }}</a>
                     <div class="date">{{ comment.date }}</div>
                     <div class="content">{{ comment.comment }}</div>
                         {% if session.user_id == comment.user_id %}
